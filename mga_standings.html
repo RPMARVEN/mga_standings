@@ -75,6 +75,15 @@
         text-align: center;
     }
     td.rank { font-weight: 700; color: #264636; }
+    td.rank-delta {
+        font-weight: 600; font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        text-align: center; white-space: nowrap;
+    }
+    td.rank-delta.up   { color: #1a7f3e; }
+    td.rank-delta.down { color: #b3261e; }
+    td.rank-delta.flat { color: #aaa; }
+    td.rank-delta.new  { color: #1a472a; font-size: 10px; letter-spacing: 0.5px; }
     td.player { text-align: left; font-weight: 500; white-space: nowrap; }
     td.pts { font-variant-numeric: tabular-nums; }
     td.empty { color: #ccc; }
@@ -501,7 +510,7 @@
 <div class="container">
     <div class="header">
         <h1>MGA Ryder Cup Points Standings</h1>
-        <div class="subtitle">2025-26 Season - Updated May 14, 2026 12:11 PM</div>
+        <div class="subtitle">2025-26 Season - Updated May 14, 2026 12:42 PM</div>
     </div>
     
     <div class="overview-split">
@@ -595,6 +604,7 @@
                 <thead>
                     <tr>
                         <th>Rank</th>
+                        <th>+/-</th>
                         <th>Player</th>
                         <th>Events</th>
                         <th>Total</th>
@@ -604,90 +614,105 @@
                     
                 <tr>
                     <td class="rank">1</td>
+                    <td class="rank-delta up">&#9650; 2</td>
                     <td class="player">Harnett, William</td>
                     <td class="events">6</td>
                     <td class="total">490</td>
                 </tr>
                 <tr>
                     <td class="rank">2</td>
+                    <td class="rank-delta down">&#9660; 1</td>
                     <td class="player">Wojnas, Jay</td>
                     <td class="events">6</td>
                     <td class="total">470</td>
                 </tr>
                 <tr>
                     <td class="rank">3</td>
+                    <td class="rank-delta down">&#9660; 1</td>
                     <td class="player">Dunsworth, Michael</td>
                     <td class="events">6</td>
                     <td class="total">420</td>
                 </tr>
                 <tr>
                     <td class="rank">4</td>
+                    <td class="rank-delta up">&#9650; 2</td>
                     <td class="player">Girot, Robert</td>
                     <td class="events">6</td>
                     <td class="total">405</td>
                 </tr>
                 <tr>
                     <td class="rank">5</td>
+                    <td class="rank-delta flat">-</td>
                     <td class="player">Morrone, Jeff</td>
                     <td class="events">6</td>
                     <td class="total">400</td>
                 </tr>
                 <tr>
                     <td class="rank">6</td>
+                    <td class="rank-delta down">&#9660; 2</td>
                     <td class="player">Kiernan, John</td>
                     <td class="events">5</td>
                     <td class="total">370</td>
                 </tr>
                 <tr>
                     <td class="rank">7</td>
+                    <td class="rank-delta up">&#9650; 3</td>
                     <td class="player">Agnew, Mark</td>
                     <td class="events">5</td>
                     <td class="total">340</td>
                 </tr>
                 <tr>
                     <td class="rank">8</td>
+                    <td class="rank-delta up">&#9650; 6</td>
                     <td class="player">Cross, Jeremy</td>
                     <td class="events">6</td>
                     <td class="total">330</td>
                 </tr>
                 <tr>
                     <td class="rank">9</td>
+                    <td class="rank-delta up">&#9650; 3</td>
                     <td class="player">Kelley, Mike</td>
                     <td class="events">4</td>
                     <td class="total">325</td>
                 </tr>
                 <tr>
                     <td class="rank">T10</td>
+                    <td class="rank-delta down">&#9660; 3</td>
                     <td class="player">Locke, Tom</td>
                     <td class="events">6</td>
                     <td class="total">320</td>
                 </tr>
                 <tr>
                     <td class="rank">T10</td>
+                    <td class="rank-delta down">&#9660; 3</td>
                     <td class="player">Spencer, Steve</td>
                     <td class="events">5</td>
                     <td class="total">320</td>
                 </tr>
                 <tr>
                     <td class="rank">12</td>
+                    <td class="rank-delta up">&#9650; 16</td>
                     <td class="player">Brown, Chris</td>
                     <td class="events">5</td>
                     <td class="total">290</td>
                 </tr>
                 <tr>
                     <td class="rank">13</td>
+                    <td class="rank-delta up">&#9650; 5</td>
                     <td class="player">Finnin, Michael</td>
                     <td class="events">6</td>
                     <td class="total">285</td>
                 </tr>
                 <tr>
                     <td class="rank">14</td>
+                    <td class="rank-delta down">&#9660; 4</td>
                     <td class="player">Tryggestad, Devon</td>
                     <td class="events">5</td>
                     <td class="total">280</td>
                 </tr>
                 <tr>
                     <td class="rank">T15</td>
+                    <td class="rank-delta up">&#9650; 9</td>
                     <td class="player">Cottam, Ryan</td>
                     <td class="events">6</td>
                     <td class="total">275</td>
@@ -709,6 +734,7 @@
             <thead>
                 <tr>
                     <th>Rank</th>
+                    <th>+/-</th>
                     <th style="text-align:left; min-width:160px;">Player</th>
                     <th>Member-Member</th><th>2-Man Scramble</th><th>ABCD Scramble</th><th>2-Man Shamble</th><th>Quota</th><th>The Gerald</th>
                     <th>Events</th>
@@ -718,7 +744,7 @@
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="11" class="standings-footer">
+                    <td colspan="12" class="standings-footer">
                         Participation pts per event: (25) Member-Member &bull; (10) 2-Man Scramble, ABCD Scramble, 2-Man Shamble, Quota, The Gerald
                     </td>
                 </tr>
@@ -727,6 +753,7 @@
                 
         <tr>
             <td class="rank">1</td>
+            <td class="rank-delta up">&#9650; 2</td>
             <td class="player">Harnett, William</td>
             <td class="pts">125</td><td class="pts">60</td><td class="pts">50</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts">100</td>
             <td class="events">6</td>
@@ -735,6 +762,7 @@
         </tr>
         <tr>
             <td class="rank">2</td>
+            <td class="rank-delta down">&#9660; 1</td>
             <td class="player">Wojnas, Jay</td>
             <td class="pts">75</td><td class="pts">90</td><td class="pts">50</td><td class="pts">80</td><td class="pts">100</td><td class="pts empty">-</td>
             <td class="events">6</td>
@@ -743,6 +771,7 @@
         </tr>
         <tr>
             <td class="rank">3</td>
+            <td class="rank-delta down">&#9660; 1</td>
             <td class="player">Dunsworth, Michael</td>
             <td class="pts">75</td><td class="pts">100</td><td class="pts">100</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">6</td>
@@ -751,6 +780,7 @@
         </tr>
         <tr>
             <td class="rank">4</td>
+            <td class="rank-delta up">&#9650; 2</td>
             <td class="player">Girot, Robert</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts">70</td><td class="pts">80</td>
             <td class="events">6</td>
@@ -759,6 +789,7 @@
         </tr>
         <tr>
             <td class="rank">5</td>
+            <td class="rank-delta flat">-</td>
             <td class="player">Morrone, Jeff</td>
             <td class="pts">75</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts">80</td><td class="pts">70</td>
             <td class="events">6</td>
@@ -767,6 +798,7 @@
         </tr>
         <tr>
             <td class="rank">6</td>
+            <td class="rank-delta down">&#9660; 2</td>
             <td class="player">Kiernan, John</td>
             <td class="pts">125</td><td class="pts">80</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -775,6 +807,7 @@
         </tr>
         <tr>
             <td class="rank">7</td>
+            <td class="rank-delta up">&#9650; 3</td>
             <td class="player">Agnew, Mark</td>
             <td class="pts">75</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts">40</td><td class="pts">60</td>
             <td class="events">5</td>
@@ -783,6 +816,7 @@
         </tr>
         <tr>
             <td class="rank">8</td>
+            <td class="rank-delta up">&#9650; 6</td>
             <td class="player">Cross, Jeremy</td>
             <td class="pts">125</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">90</td>
             <td class="events">6</td>
@@ -791,6 +825,7 @@
         </tr>
         <tr>
             <td class="rank">9</td>
+            <td class="rank-delta up">&#9650; 3</td>
             <td class="player">Kelley, Mike</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts">100</td><td class="pts">60</td>
             <td class="events">4</td>
@@ -799,6 +834,7 @@
         </tr>
         <tr>
             <td class="rank">T10</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Locke, Tom</td>
             <td class="pts">75</td><td class="pts">90</td><td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">6</td>
@@ -807,6 +843,7 @@
         </tr>
         <tr>
             <td class="rank">T10</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Spencer, Steve</td>
             <td class="pts">125</td><td class="pts">60</td><td class="pts empty">-</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -815,6 +852,7 @@
         </tr>
         <tr>
             <td class="rank">12</td>
+            <td class="rank-delta up">&#9650; 16</td>
             <td class="player">Brown, Chris</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts">20</td><td class="pts">40</td><td class="pts">100</td>
             <td class="events">5</td>
@@ -823,6 +861,7 @@
         </tr>
         <tr>
             <td class="rank">13</td>
+            <td class="rank-delta up">&#9650; 5</td>
             <td class="player">Finnin, Michael</td>
             <td class="pts">50</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts">20</td><td class="pts empty">-</td><td class="pts">60</td>
             <td class="events">6</td>
@@ -831,6 +870,7 @@
         </tr>
         <tr>
             <td class="rank">14</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Tryggestad, Devon</td>
             <td class="pts">125</td><td class="pts">40</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -839,6 +879,7 @@
         </tr>
         <tr>
             <td class="rank">T15</td>
+            <td class="rank-delta up">&#9650; 9</td>
             <td class="player">Cottam, Ryan</td>
             <td class="pts empty">-</td><td class="pts">30</td><td class="pts">50</td><td class="pts">20</td><td class="pts">40</td><td class="pts">60</td>
             <td class="events">6</td>
@@ -847,6 +888,7 @@
         </tr>
         <tr>
             <td class="rank">T15</td>
+            <td class="rank-delta down">&#9660; 6</td>
             <td class="player">Fry, Brett</td>
             <td class="pts empty">-</td><td class="pts">50</td><td class="pts">50</td><td class="pts">30</td><td class="pts">80</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -855,6 +897,7 @@
         </tr>
         <tr>
             <td class="rank">17</td>
+            <td class="rank-delta up">&#9650; 1</td>
             <td class="player">Recker, Thomas</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts">100</td><td class="pts">40</td>
             <td class="events">5</td>
@@ -863,6 +906,7 @@
         </tr>
         <tr>
             <td class="rank">T18</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Austin, Tim</td>
             <td class="pts empty">-</td><td class="pts">100</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -871,6 +915,7 @@
         </tr>
         <tr>
             <td class="rank">T18</td>
+            <td class="rank-delta up">&#9650; 2</td>
             <td class="player">Green, Kelly</td>
             <td class="pts">75</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts">40</td>
             <td class="events">5</td>
@@ -879,6 +924,7 @@
         </tr>
         <tr>
             <td class="rank">T20</td>
+            <td class="rank-delta up">&#9650; 22</td>
             <td class="player">Lowe, Kevin</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td>
             <td class="events">4</td>
@@ -887,6 +933,7 @@
         </tr>
         <tr>
             <td class="rank">T20</td>
+            <td class="rank-delta up">&#9650; 16</td>
             <td class="player">Newbrough, Stu</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts">90</td>
             <td class="events">5</td>
@@ -895,6 +942,7 @@
         </tr>
         <tr>
             <td class="rank">22</td>
+            <td class="rank-delta down">&#9660; 8</td>
             <td class="player">Parks, Mike</td>
             <td class="pts empty">-</td><td class="pts">90</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -903,6 +951,7 @@
         </tr>
         <tr>
             <td class="rank">23</td>
+            <td class="rank-delta up">&#9650; 13</td>
             <td class="player">Girot, Geoffrey</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts">70</td>
             <td class="events">5</td>
@@ -911,6 +960,7 @@
         </tr>
         <tr>
             <td class="rank">24</td>
+            <td class="rank-delta down">&#9660; 10</td>
             <td class="player">Swartz, Michael</td>
             <td class="pts">125</td><td class="pts">60</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -919,6 +969,7 @@
         </tr>
         <tr>
             <td class="rank">T25</td>
+            <td class="rank-delta down">&#9660; 8</td>
             <td class="player">Byrns, Ray</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -927,6 +978,7 @@
         </tr>
         <tr>
             <td class="rank">T25</td>
+            <td class="rank-delta up">&#9650; 21</td>
             <td class="player">Wells, Daniel</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts">80</td>
             <td class="events">6</td>
@@ -935,6 +987,7 @@
         </tr>
         <tr>
             <td class="rank">27</td>
+            <td class="rank-delta down">&#9660; 7</td>
             <td class="player">Parks, Gerald</td>
             <td class="pts empty">-</td><td class="pts">90</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -943,6 +996,7 @@
         </tr>
         <tr>
             <td class="rank">28</td>
+            <td class="rank-delta up">&#9650; 18</td>
             <td class="player">Jones, Brent</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">70</td>
             <td class="events">5</td>
@@ -951,6 +1005,7 @@
         </tr>
         <tr>
             <td class="rank">T29</td>
+            <td class="rank-delta down">&#9660; 9</td>
             <td class="player">Phillips, Jason</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts">80</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -959,6 +1014,7 @@
         </tr>
         <tr>
             <td class="rank">T29</td>
+            <td class="rank-delta down">&#9660; 9</td>
             <td class="player">Truelove, Randy</td>
             <td class="pts">75</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -967,6 +1023,7 @@
         </tr>
         <tr>
             <td class="rank">T29</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Wood, Peter</td>
             <td class="pts">125</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -975,6 +1032,7 @@
         </tr>
         <tr>
             <td class="rank">32</td>
+            <td class="rank-delta down">&#9660; 7</td>
             <td class="player">Lanford, Mike</td>
             <td class="pts">125</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -983,6 +1041,7 @@
         </tr>
         <tr>
             <td class="rank">33</td>
+            <td class="rank-delta up">&#9650; 18</td>
             <td class="player">Ampaipitakwong, Pete</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts empty">-</td><td class="pts">70</td>
             <td class="events">5</td>
@@ -991,6 +1050,7 @@
         </tr>
         <tr>
             <td class="rank">34</td>
+            <td class="rank-delta up">&#9650; 39</td>
             <td class="player">Ludwig, George</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts empty">-</td><td class="pts">100</td>
             <td class="events">3</td>
@@ -999,6 +1059,7 @@
         </tr>
         <tr>
             <td class="rank">35</td>
+            <td class="rank-delta down">&#9660; 8</td>
             <td class="player">Mueller, Shawn</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1007,6 +1068,7 @@
         </tr>
         <tr>
             <td class="rank">T36</td>
+            <td class="rank-delta down">&#9660; 8</td>
             <td class="player">Guthrie, Matt</td>
             <td class="pts">75</td><td class="pts">60</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1015,6 +1077,7 @@
         </tr>
         <tr>
             <td class="rank">T36</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Harless, Garrett</td>
             <td class="pts">125</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1023,6 +1086,7 @@
         </tr>
         <tr>
             <td class="rank">T38</td>
+            <td class="rank-delta down">&#9660; 8</td>
             <td class="player">Strickland, Joshua</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1031,6 +1095,7 @@
         </tr>
         <tr>
             <td class="rank">T38</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Terranova, Adrian</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">6</td>
@@ -1039,6 +1104,7 @@
         </tr>
         <tr>
             <td class="rank">T40</td>
+            <td class="rank-delta down">&#9660; 6</td>
             <td class="player">Anders, Ken</td>
             <td class="pts">125</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1047,6 +1113,7 @@
         </tr>
         <tr>
             <td class="rank">T40</td>
+            <td class="rank-delta down">&#9660; 6</td>
             <td class="player">Hendrie, Christopher</td>
             <td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1055,6 +1122,7 @@
         </tr>
         <tr>
             <td class="rank">T40</td>
+            <td class="rank-delta up">&#9650; 38</td>
             <td class="player">Knauss, Robert</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts">100</td>
             <td class="events">2</td>
@@ -1063,6 +1131,7 @@
         </tr>
         <tr>
             <td class="rank">T40</td>
+            <td class="rank-delta down">&#9660; 9</td>
             <td class="player">Novak, Dite</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts">70</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1071,6 +1140,7 @@
         </tr>
         <tr>
             <td class="rank">44</td>
+            <td class="rank-delta down">&#9660; 8</td>
             <td class="player">Hudson, Glenn</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">20</td><td class="pts">80</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -1079,6 +1149,7 @@
         </tr>
         <tr>
             <td class="rank">45</td>
+            <td class="rank-delta down">&#9660; 6</td>
             <td class="player">Springer, Chris</td>
             <td class="pts">75</td><td class="pts">30</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1087,6 +1158,7 @@
         </tr>
         <tr>
             <td class="rank">T46</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Coffin, Greg</td>
             <td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts">30</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">6</td>
@@ -1095,6 +1167,7 @@
         </tr>
         <tr>
             <td class="rank">T46</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Dowling, Patrick</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1103,6 +1176,7 @@
         </tr>
         <tr>
             <td class="rank">T46</td>
+            <td class="rank-delta up">&#9650; 13</td>
             <td class="player">Parks, Ryan</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">40</td>
             <td class="events">5</td>
@@ -1111,6 +1185,7 @@
         </tr>
         <tr>
             <td class="rank">T49</td>
+            <td class="rank-delta down">&#9660; 10</td>
             <td class="player">Alt, Kyle</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1119,6 +1194,7 @@
         </tr>
         <tr>
             <td class="rank">T49</td>
+            <td class="rank-delta down">&#9660; 10</td>
             <td class="player">Flanders, Andrew</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1127,6 +1203,7 @@
         </tr>
         <tr>
             <td class="rank">T51</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Benzine, Aaron</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">6</td>
@@ -1135,6 +1212,7 @@
         </tr>
         <tr>
             <td class="rank">T51</td>
+            <td class="rank-delta down">&#9660; 9</td>
             <td class="player">Moore, Joseph</td>
             <td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts">30</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -1143,6 +1221,7 @@
         </tr>
         <tr>
             <td class="rank">53</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Dorrance, Will</td>
             <td class="pts">75</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -1151,6 +1230,7 @@
         </tr>
         <tr>
             <td class="rank">54</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Hurd, Rob</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1159,6 +1239,7 @@
         </tr>
         <tr>
             <td class="rank">55</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Conner, Chris</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1167,6 +1248,7 @@
         </tr>
         <tr>
             <td class="rank">T56</td>
+            <td class="rank-delta up">&#9650; 3</td>
             <td class="player">Lavalette, John</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -1175,6 +1257,7 @@
         </tr>
         <tr>
             <td class="rank">T56</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Michelsen, John</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts">20</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1183,6 +1266,7 @@
         </tr>
         <tr>
             <td class="rank">T56</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Miles, Ryan</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">5</td>
@@ -1191,6 +1275,7 @@
         </tr>
         <tr>
             <td class="rank">T59</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Bruegel, Michael</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1199,6 +1284,7 @@
         </tr>
         <tr>
             <td class="rank">T59</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Hawley, Clay</td>
             <td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts">30</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1207,6 +1293,7 @@
         </tr>
         <tr>
             <td class="rank">T59</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Larkin, Tripp</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">100</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1215,6 +1302,7 @@
         </tr>
         <tr>
             <td class="rank">T59</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Nelson, Brandon</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1223,6 +1311,7 @@
         </tr>
         <tr>
             <td class="rank">T59</td>
+            <td class="rank-delta up">&#9650; 4</td>
             <td class="player">Peirson, Matt</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1231,6 +1320,7 @@
         </tr>
         <tr>
             <td class="rank">T64</td>
+            <td class="rank-delta up">&#9650; 2</td>
             <td class="player">Lang, Stuart</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1239,6 +1329,7 @@
         </tr>
         <tr>
             <td class="rank">T64</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Novich, Darren</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1247,6 +1338,7 @@
         </tr>
         <tr>
             <td class="rank">T64</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Struthers, Sam</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1255,6 +1347,7 @@
         </tr>
         <tr>
             <td class="rank">T67</td>
+            <td class="rank-delta up">&#9650; 1</td>
             <td class="player">Adler, John</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1263,6 +1356,7 @@
         </tr>
         <tr>
             <td class="rank">T67</td>
+            <td class="rank-delta up">&#9650; 1</td>
             <td class="player">Brown, Peter</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1271,6 +1365,7 @@
         </tr>
         <tr>
             <td class="rank">T67</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Desing, Patrick</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1279,6 +1374,7 @@
         </tr>
         <tr>
             <td class="rank">T67</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Turner, Gerald</td>
             <td class="pts empty">-</td><td class="pts">80</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1287,6 +1383,7 @@
         </tr>
         <tr>
             <td class="rank">71</td>
+            <td class="rank-delta down">&#9660; 5</td>
             <td class="player">Kapci, Bailey</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1295,6 +1392,7 @@
         </tr>
         <tr>
             <td class="rank">T72</td>
+            <td class="rank-delta up">&#9650; 1</td>
             <td class="player">Avila, Tom</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1303,6 +1401,7 @@
         </tr>
         <tr>
             <td class="rank">T72</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Folse, Glenn</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1311,6 +1410,7 @@
         </tr>
         <tr>
             <td class="rank">T72</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Switser, Chris</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">70</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1319,6 +1419,7 @@
         </tr>
         <tr>
             <td class="rank">75</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Bolen, Trey</td>
             <td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1327,6 +1428,7 @@
         </tr>
         <tr>
             <td class="rank">T76</td>
+            <td class="rank-delta down">&#9660; 1</td>
             <td class="player">Bennett, Dustan</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1335,6 +1437,7 @@
         </tr>
         <tr>
             <td class="rank">T76</td>
+            <td class="rank-delta up">&#9650; 24</td>
             <td class="player">Yukna, Mike</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">60</td>
             <td class="events">2</td>
@@ -1343,6 +1446,7 @@
         </tr>
         <tr>
             <td class="rank">T78</td>
+            <td class="rank-delta flat">-</td>
             <td class="player">Butler, Terry</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">50</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1351,6 +1455,7 @@
         </tr>
         <tr>
             <td class="rank">T78</td>
+            <td class="rank-delta flat">-</td>
             <td class="player">Jones, Steve</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1359,6 +1464,7 @@
         </tr>
         <tr>
             <td class="rank">T78</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Meredith, Mike</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1367,6 +1473,7 @@
         </tr>
         <tr>
             <td class="rank">81</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Cardoso, Alex</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">20</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1375,6 +1482,7 @@
         </tr>
         <tr>
             <td class="rank">T82</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Eubanks, Jay</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1383,6 +1491,7 @@
         </tr>
         <tr>
             <td class="rank">T82</td>
+            <td class="rank-delta up">&#9650; 1</td>
             <td class="player">Thomas, Bobby</td>
             <td class="pts empty">-</td><td class="pts">30</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1391,6 +1500,7 @@
         </tr>
         <tr>
             <td class="rank">T84</td>
+            <td class="rank-delta down">&#9660; 2</td>
             <td class="player">Davis, Jim</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1399,6 +1509,7 @@
         </tr>
         <tr>
             <td class="rank">T84</td>
+            <td class="rank-delta up">&#9650; 1</td>
             <td class="player">Russell, Jr</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1407,6 +1518,7 @@
         </tr>
         <tr>
             <td class="rank">86</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Hames, Mike</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts">40</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1415,6 +1527,7 @@
         </tr>
         <tr>
             <td class="rank">87</td>
+            <td class="rank-delta down">&#9660; 2</td>
             <td class="player">Collins, Don</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1423,6 +1536,7 @@
         </tr>
         <tr>
             <td class="rank">T88</td>
+            <td class="rank-delta down">&#9660; 1</td>
             <td class="player">Antrim, Noah</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">4</td>
@@ -1431,6 +1545,7 @@
         </tr>
         <tr>
             <td class="rank">T88</td>
+            <td class="rank-delta down">&#9660; 1</td>
             <td class="player">Cottingham, Scott</td>
             <td class="pts empty">-</td><td class="pts">30</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1439,6 +1554,7 @@
         </tr>
         <tr>
             <td class="rank">T90</td>
+            <td class="rank-delta flat">-</td>
             <td class="player">Bausch, Marty</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1447,6 +1563,7 @@
         </tr>
         <tr>
             <td class="rank">T90</td>
+            <td class="rank-delta down">&#9660; 1</td>
             <td class="player">Maness, Will</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1455,6 +1572,7 @@
         </tr>
         <tr>
             <td class="rank">T92</td>
+            <td class="rank-delta up">&#9650; 2</td>
             <td class="player">Liepins, Eric</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1463,6 +1581,7 @@
         </tr>
         <tr>
             <td class="rank">T92</td>
+            <td class="rank-delta up">&#9650; 2</td>
             <td class="player">McCall, Cam</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">3</td>
@@ -1471,6 +1590,7 @@
         </tr>
         <tr>
             <td class="rank">T94</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Grimm, Michael</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1479,6 +1599,7 @@
         </tr>
         <tr>
             <td class="rank">T94</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Hood, Tony</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1487,6 +1608,7 @@
         </tr>
         <tr>
             <td class="rank">T94</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Stephens, Parker</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1495,6 +1617,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta up">&#9650; 3</td>
             <td class="player">Beasley, Ryan</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1503,6 +1626,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Caver, Chris</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1511,6 +1635,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Day, Matt</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1519,6 +1644,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Quarles, Aaron</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1527,6 +1653,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta up">&#9650; 3</td>
             <td class="player">Reyes, Marvin</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1535,6 +1662,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta up">&#9650; 3</td>
             <td class="player">Rush, Jim</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1543,6 +1671,7 @@
         </tr>
         <tr>
             <td class="rank">T97</td>
+            <td class="rank-delta down">&#9660; 3</td>
             <td class="player">Tredinnick, Rick</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">2</td>
@@ -1551,6 +1680,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Badgley, Rick</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1559,6 +1689,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta new">NEW</td>
             <td class="player">Brown, Rylee</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1567,6 +1698,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta new">NEW</td>
             <td class="player">Dampier, Mike</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1575,6 +1707,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Day, Ernest</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1583,6 +1716,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta new">NEW</td>
             <td class="player">Defeo, Ken</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1591,6 +1725,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Donovan, John</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1599,6 +1734,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Dorr, Alan</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1607,6 +1743,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Fuqua, Stephen</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1615,6 +1752,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Gibbs, Max</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1623,6 +1761,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Moser, Sean</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1631,6 +1770,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Wiens, Brian</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>
@@ -1639,6 +1779,7 @@
         </tr>
         <tr>
             <td class="rank">T104</td>
+            <td class="rank-delta down">&#9660; 4</td>
             <td class="player">Williams, Justin</td>
             <td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td><td class="pts empty">-</td>
             <td class="events">1</td>

@@ -545,7 +545,18 @@ def _weather_icon_html(condition):
     return svg
 
 
-def build_overview_html(standings, player_data, player_events):
+def format_rank_delta(delta):
+    """Render rank-change cell HTML. delta > 0 = moved up, < 0 = down, None = new entrant."""
+    if delta is None:
+        return '<td class="rank-delta new">NEW</td>'
+    if delta > 0:
+        return f'<td class="rank-delta up">&#9650; {delta}</td>'
+    if delta < 0:
+        return f'<td class="rank-delta down">&#9660; {abs(delta)}</td>'
+    return '<td class="rank-delta flat">-</td>'
+
+
+def build_overview_html(standings, player_data, player_events, rank_changes):
     """Build the overview page: left stats + chart, right top 10."""
     total_players = len(standings)
     current_season = "2025-26"
@@ -583,9 +594,11 @@ def build_overview_html(standings, player_data, player_events):
             e["rank"] == rank and e["player"] != entry["player"] for e in standings
         ) else str(rank)
         total_display = int(entry["total"]) if entry["total"] == int(entry["total"]) else f"{entry['total']:.1f}"
+        delta_cell = format_rank_delta(rank_changes.get(entry["player"]))
         top15_rows += f"""
                 <tr>
                     <td class="rank">{rank_display}</td>
+                    {delta_cell}
                     <td class="player">{entry['player']}</td>
                     <td class="events">{entry['events']}</td>
                     <td class="total">{total_display}</td>
@@ -686,6 +699,7 @@ def build_overview_html(standings, player_data, player_events):
                 <thead>
                     <tr>
                         <th>Rank</th>
+                        <th>+/-</th>
                         <th>Player</th>
                         <th>Events</th>
                         <th>Total</th>
@@ -1468,9 +1482,11 @@ def generate_html(standings, tournament_names, player_data, player_events):
         total_display = int(entry["total"]) if entry["total"] == int(entry["total"]) else f"{entry['total']:.1f}"
         part_display = int(entry["participation"]) if entry["participation"] == int(entry["participation"]) else f"{entry['participation']:.1f}"
 
+        delta_cell = format_rank_delta(rank_changes.get(entry["player"]))
         rows_html += f"""
         <tr>
             <td class="rank">{rank_display}</td>
+            {delta_cell}
             <td class="player">{entry['player']}</td>
             {tourney_cells}
             <td class="events">{entry['events']}</td>
@@ -1567,6 +1583,15 @@ def generate_html(standings, tournament_names, player_data, player_events):
         text-align: center;
     }}
     td.rank {{ font-weight: 700; color: #264636; }}
+    td.rank-delta {{
+        font-weight: 600; font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        text-align: center; white-space: nowrap;
+    }}
+    td.rank-delta.up   {{ color: #1a7f3e; }}
+    td.rank-delta.down {{ color: #b3261e; }}
+    td.rank-delta.flat {{ color: #aaa; }}
+    td.rank-delta.new  {{ color: #1a472a; font-size: 10px; letter-spacing: 0.5px; }}
     td.player {{ text-align: left; font-weight: 500; white-space: nowrap; }}
     td.pts {{ font-variant-numeric: tabular-nums; }}
     td.empty {{ color: #ccc; }}
@@ -1995,7 +2020,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
         <h1>MGA Ryder Cup Points Standings</h1>
         <div class="subtitle">2025-26 Season - Updated {now}</div>
     </div>
-    {build_overview_html(standings, player_data, player_events)}
+    {build_overview_html(standings, player_data, player_events, rank_changes)}
 </div>
 
 <!-- Full Standings -->
@@ -2009,6 +2034,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
             <thead>
                 <tr>
                     <th>Rank</th>
+                    <th>+/-</th>
                     <th style="text-align:left; min-width:160px;">Player</th>
                     {tourney_headers}
                     <th>Events</th>
@@ -2018,7 +2044,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="{len(tournament_names) + 5}" class="standings-footer">
+                    <td colspan="{len(tournament_names) + 6}" class="standings-footer">
                         Participation pts per event: {part_reference}
                     </td>
                 </tr>
