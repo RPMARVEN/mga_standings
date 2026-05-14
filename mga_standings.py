@@ -34,7 +34,7 @@ TOURNAMENTS = [
     ("Lonely Guy - First Round", None,               "lonely_guy_mp", 1,  0,  False, None, 50,  "2025-26"),
     ("2 Man Match Play - First Round", None,               "2man_mp", 2,  0,  False, None, 25,  "2025-26"),
     ("Quota",                  "Quota",            "individual", 1,  3,  True,  "2026-04-11", 10,  "2025-26"),
-    ("The Gerald",             None,               "individual", 1,  4,  False, "2026-05-02", 10,  "2025-26"),
+    ("The Gerald",             "The Gerald",       "individual", 1,  3,  True,  "2026-05-02", 10,  "2025-26"),
     ("Member/Member",          None,               "2man_mm",    2,  3,  False, "2026-06-06", 25,  "2025-26"),
     ("Presidents Cup",         None,               "presidents", 1,  5,  False, "2026-07-11", 50,  "2025-26"),
     ("6-6-6",                  None,               "tbd",        0,  0,  False, "2026-08-08", 10,  "2025-26"),
@@ -1998,26 +1998,6 @@ def generate_html(standings, tournament_names, player_data, player_events):
     {build_overview_html(standings, player_data, player_events)}
 </div>
 
-<!-- Season Schedule & Points -->
-<div class="container schedule-container">
-    <div class="header" style="padding: 12px 30px;">
-        <h1 style="font-size: 20px;">Season Schedule &amp; Points</h1>
-        <div class="subtitle">Full Tournament Calendar</div>
-    </div>
-    <div class="schedule">
-        {build_season_schedule_html()}
-    </div>
-</div>
-
-<!-- Event Spotlight -->
-<div class="container spotlight-container">
-    <div class="header">
-        <h1>Event Spotlight: {latest_event_name}</h1>
-        <div class="subtitle">Most Recent Tournament</div>
-    </div>
-    {build_event_spotlight_html(player_data, player_events)}
-</div>
-
 <!-- Full Standings -->
 <div class="container standings-container">
     <div class="header">
@@ -2048,6 +2028,26 @@ def generate_html(standings, tournament_names, player_data, player_events):
             </tbody>
         </table>
     </div>
+</div>
+
+<!-- Season Schedule & Points -->
+<div class="container schedule-container">
+    <div class="header" style="padding: 12px 30px;">
+        <h1 style="font-size: 20px;">Season Schedule &amp; Points</h1>
+        <div class="subtitle">Full Tournament Calendar</div>
+    </div>
+    <div class="schedule">
+        {build_season_schedule_html()}
+    </div>
+</div>
+
+<!-- Event Spotlight -->
+<div class="container spotlight-container">
+    <div class="header">
+        <h1>Event Spotlight: {latest_event_name}</h1>
+        <div class="subtitle">Most Recent Tournament</div>
+    </div>
+    {build_event_spotlight_html(player_data, player_events)}
 </div>
 
 <!-- APPENDIX: Scoring Breakdown -->
