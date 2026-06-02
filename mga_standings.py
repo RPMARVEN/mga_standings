@@ -1805,8 +1805,12 @@ def generate_html(standings, tournament_names, player_data, player_events):
     }}
 
     /* ── Full Standings ── */
-    .standings-container {{ page-break-before: always; }}
-    .standings-container .table-wrapper {{ overflow-x: auto; }}
+    /* overflow:visible (not auto) so the column headers stay sticky to the
+       top of the page as the long table scrolls. On narrow screens the table
+       collapses to four columns (see the screen media query) so it never
+       overflows the viewport. */
+    .standings-container {{ page-break-before: always; overflow: visible; }}
+    .standings-container .table-wrapper {{ overflow: visible; }}
     .standings-container thead th {{
         position: sticky;
         top: 0;
@@ -2004,8 +2008,11 @@ def generate_html(standings, tournament_names, player_data, player_events):
         .next-up-name {{ font-size: 16px; }}
         .stat-number {{ font-size: 22px; }}
     }}
-    /* ── Mobile (screen only): standings collapses to Rank / +/- / Player / Total ── */
-    @media screen and (max-width: 768px) {{
+    /* ── Narrow screens: standings collapses to Rank / +/- / Player / Total ──
+       Breakpoint is 1024px (not 768) because the full 12-column table needs
+       ~975px to render. Below that it would overflow the viewport, so we show
+       the collapsed card with tap-to-expand instead. */
+    @media screen and (max-width: 1024px) {{
         /* Hide every standings cell, then re-show the four we keep + the detail row */
         .standings-container table thead th,
         .standings-container table tbody td {{ display: none; }}
@@ -2167,7 +2174,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
         row.classList.add('has-detail');
 
         row.addEventListener('click', function () {{
-            if (window.innerWidth > 768) return;     // collapse only active on phones
+            if (window.innerWidth > 1024) return;    // collapse only active on narrow screens
             var next = row.nextElementSibling;
             if (next && next.classList.contains('detail-row')) {{
                 next.parentNode.removeChild(next);
