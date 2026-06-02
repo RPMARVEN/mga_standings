@@ -297,8 +297,8 @@
     }
 
     /* ── Full Standings ── */
-    .standings-container { page-break-before: always; overflow: visible; }
-    .standings-container .table-wrapper { overflow: visible; }
+    .standings-container { page-break-before: always; }
+    .standings-container .table-wrapper { overflow-x: auto; }
     .standings-container thead th {
         position: sticky;
         top: 0;
@@ -463,12 +463,20 @@
         flex-shrink: 0;
     }
 
+    /* ── Mobile standings: tap-to-expand (defaults; activated under media query) ── */
+    .detail-row { display: none; }
+    .detail-caret { display: none; }
+    .mobile-tip { display: none; }
+
     @media print {
         body { background: #fff; padding: 0; }
         .container { box-shadow: none; border-radius: 0; }
         .header { padding: 20px; }
         tbody tr:nth-child(even) { background: #f5f5f5; }
         .rotate-hint { display: none !important; }
+        /* Print keeps the full wide table with sticky headers */
+        .standings-container,
+        .standings-container .table-wrapper { overflow: visible; }
     }
     @media (max-width: 768px) {
         body { padding: 8px; }
@@ -488,8 +496,63 @@
         .next-up-name { font-size: 16px; }
         .stat-number { font-size: 22px; }
     }
-    @media (max-width: 768px) and (orientation: portrait) {
-        .rotate-hint { display: flex; }
+    /* ── Mobile (screen only): standings collapses to Rank / +/- / Player / Total ── */
+    @media screen and (max-width: 768px) {
+        /* Hide every standings cell, then re-show the four we keep + the detail row */
+        .standings-container table thead th,
+        .standings-container table tbody td { display: none; }
+        .standings-container table thead th:nth-child(1),
+        .standings-container table thead th:nth-child(2),
+        .standings-container table thead th:nth-child(3),
+        .standings-container table thead th:last-child,
+        .standings-container table tbody td:nth-child(1),
+        .standings-container table tbody td:nth-child(2),
+        .standings-container table tbody td:nth-child(3),
+        .standings-container table tbody td:last-child { display: table-cell; }
+
+        .standings-container td.player { white-space: normal; }
+        .standings-container tbody tr.has-detail { cursor: pointer; }
+        .detail-caret {
+            display: inline-block;
+            color: #1a472a;
+            font-size: 9px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .detail-row { display: table-row; }
+        .detail-row > td {
+            display: table-cell !important;
+            background: #f0f7f2;
+            padding: 10px 14px;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 18px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 12px;
+            border-bottom: 1px solid #dde7e0;
+            padding-bottom: 3px;
+        }
+        .detail-label { color: #555; }
+        .detail-value { font-weight: 700; color: #1a472a; }
+        .detail-value.empty { color: #bbb; font-weight: 400; }
+
+        .mobile-tip {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a7f3e;
+            background: #f0f7f2;
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e8e2;
+        }
     }
 
 
@@ -497,20 +560,11 @@
 </head>
 <body>
 
-<div class="rotate-hint">
-    <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="3" width="12" height="18" rx="2" stroke="#e65100" stroke-width="1.5" fill="none"/>
-        <path d="M3 17 L1 15 M3 17 L5 15" stroke="#e65100" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M3 17 Q3 21 7 21 L17 21 Q21 21 21 17 L21 7 Q21 5 20 4" stroke="#e65100" stroke-width="1.5" stroke-linecap="round" fill="none" stroke-dasharray="3 2"/>
-    </svg>
-    Rotate your phone for the best viewing experience
-</div>
-
 <!-- PAGE 1: Overview -->
 <div class="container">
     <div class="header">
         <h1>MGA Ryder Cup Points Standings</h1>
-        <div class="subtitle">2025-26 Season - Updated May 14, 2026 12:42 PM</div>
+        <div class="subtitle">2025-26 Season - Updated June 02, 2026 05:34 PM</div>
     </div>
     
     <div class="overview-split">
@@ -729,6 +783,7 @@
         <h1>Full Standings</h1>
         <div class="subtitle">115 Players - 2025-26 Season</div>
     </div>
+    <div class="mobile-tip">Tap a player to see event-by-event points</div>
     <div class="table-wrapper">
         <table>
             <thead>
@@ -2371,6 +2426,63 @@
     </div>
 </div>
 
+<script>
+(function () {
+    var table = document.querySelector('.standings-container table');
+    if (!table) return;
+
+    var heads = table.querySelectorAll('thead th');
+    var labels = [];
+    for (var i = 0; i < heads.length; i++) labels.push(heads[i].textContent.trim());
+    var total = labels.length;
+    if (total < 5) return;
+
+    var rows = table.querySelectorAll('tbody tr');
+    rows.forEach(function (row) {
+        var cells = row.children;
+        if (cells.length < total) return;            // skip footer / non-data rows
+        var playerCell = cells[2];
+        if (!playerCell) return;
+
+        var caret = document.createElement('span');
+        caret.className = 'detail-caret';
+        caret.textContent = '\u25B8';
+        playerCell.insertBefore(caret, playerCell.firstChild);
+        row.classList.add('has-detail');
+
+        row.addEventListener('click', function () {
+            if (window.innerWidth > 768) return;     // collapse only active on phones
+            var next = row.nextElementSibling;
+            if (next && next.classList.contains('detail-row')) {
+                next.parentNode.removeChild(next);
+                row.classList.remove('open');
+                caret.textContent = '\u25B8';
+                return;
+            }
+            var html = '<div class="detail-grid">';
+            for (var j = 3; j < total - 1; j++) {   // columns between Player and Total
+                var raw = cells[j] ? cells[j].textContent.trim() : '';
+                var isEmpty = (raw === '' || raw === '-');
+                html += '<div class="detail-item"><span class="detail-label">' +
+                        labels[j] + '</span><span class="detail-value' +
+                        (isEmpty ? ' empty' : '') + '">' +
+                        (isEmpty ? '\u2013' : raw) + '</span></div>';
+            }
+            html += '</div>';
+
+            var dr = document.createElement('tr');
+            dr.className = 'detail-row';
+            var td = document.createElement('td');
+            td.colSpan = 4;
+            td.innerHTML = html;
+            dr.appendChild(td);
+            row.parentNode.insertBefore(dr, row.nextSibling);
+            row.classList.add('open');
+            caret.textContent = '\u25BE';
+        });
+    });
+})();
+</script>
 <script data-goatcounter="https://mga-eldorado.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
