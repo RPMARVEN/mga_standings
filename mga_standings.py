@@ -181,6 +181,31 @@ def event_has_data(t):
     """True if a tournament has results to score: a real sheet OR match-play bracket data."""
     return t[1] is not None or (t[2] in MATCH_PLAY_TYPES and t[0] in MATCH_PLAY_RESULTS)
 
+
+# Schedule display for the ongoing match-play brackets: rounds 1-2 are complete
+# (shown under Completed); the next round to be played (name + bracket date) is
+# shown under Ongoing. Update next_round / next_date as later rounds finish.
+MATCH_PLAY_ROUNDS = {
+    "Lonely Guy (R1-2)": {
+        "label": "Lonely Guy",
+        "team_size": 1,
+        "r12_dates": "Apr 30 - May 10",
+        "r12_best": "150",   # max per-player banked through round 2
+        "part": "50",
+        "next_round": "Round of 16",   # 16 players remain -> 8
+        "next_date": "Jun 14",
+    },
+    "2 Man Match Play (R1-2)": {
+        "label": "2 Man Match Play",
+        "team_size": 2,
+        "r12_dates": "Mar 21 - May 11",
+        "r12_best": "75",
+        "part": "25",
+        "next_round": "Quarterfinals",   # 8 teams remain -> 4
+        "next_date": "May 13",
+    },
+}
+
 # Points tables (per-player values, already divided)
 # From "RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx"
 POINTS_TABLE = {
@@ -975,7 +1000,15 @@ def build_event_spotlight_html(player_data, player_events):
     # Date with day abbreviation
     if date_str:
         dt = datetime.strptime(date_str, "%Y-%m-%d")
-        date_with_day = dt.strftime("%a %b %d, %Y")
+        end_str = MULTI_DAY_END.get(display_name)
+        if end_str:
+            dt_end = datetime.strptime(end_str, "%Y-%m-%d")
+            if dt.month == dt_end.month:
+                date_with_day = f"{dt.strftime('%B')} {dt.day}-{dt_end.day}, {dt.year}"
+            else:
+                date_with_day = f"{dt.strftime('%B')} {dt.day} - {dt_end.strftime('%B')} {dt_end.day}, {dt.year}"
+        else:
+            date_with_day = f"{dt.strftime('%B')} {dt.day}, {dt.year}"
     else:
         date_with_day = ""
 
@@ -1505,19 +1538,30 @@ def build_season_schedule_html():
                 fmt_first(name, etype, places, team_size), str(part_pts),
                 "status-played", "Completed")
 
-    # ── Ongoing rows ──
+    # ── Match-play rounds 1 & 2 (complete and scored) ──
+    for t in ongoing:
+        info = MATCH_PLAY_ROUNDS.get(t[0])
+        if not info:
+            continue
+        all_rows += sched_row(
+            info["r12_dates"], f'{info["label"]} - Rounds 1 &amp; 2',
+            fmt_type(info["team_size"]), info["r12_best"], info["part"],
+            "status-played", "Completed")
+
+    # ── Ongoing rows (next match-play round to be played) ──
     if ongoing:
         all_rows += section_header("Ongoing")
         for t in ongoing:
-            name, sheet, etype, team_size, places, has_flights, date_str, part_pts, season = t
-            display_name = name.replace("(R1-2)", "- Rounds 1-2 Scored")
+            info = MATCH_PLAY_ROUNDS.get(t[0])
+            if not info:
+                continue
             all_rows += sched_row(
-                "", display_name, fmt_type(team_size),
-                fmt_first(name, etype, places, team_size), str(part_pts),
-                "status-next", "In Progress", hide_date=True)
+                info["next_date"], f'{info["label"]} - {info["next_round"]}',
+                fmt_type(info["team_size"]), "-", "-",
+                "status-next", "Next Round")
         all_rows += f"""
                 <tr class="sched-note-row">
-                    <td colspan="6" class="sched-note">Rounds 1 and 2 are complete and scored (participation plus points per round won). Remaining rounds will be added as a separate &quot;Finals&quot; line once played.</td>
+                    <td colspan="6" class="sched-note">Rounds 1 and 2 are complete and scored (participation plus points per round won). Dates shown are the next scheduled round from the bracket; points for the remaining rounds will be added as they are played.</td>
                 </tr>"""
 
     # ── Upcoming rows ──
