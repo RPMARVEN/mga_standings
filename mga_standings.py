@@ -1659,6 +1659,9 @@ def generate_html(standings, tournament_names, player_data, player_events):
     # All players in one table, ranked
     placement_standings = standings
 
+    part_pts_map = {t[0]: t[7] for t in TOURNAMENTS}
+    event_order = [t[0] for t in TOURNAMENTS]
+
     rows_html = ""
     for entry in placement_standings:
         rank = entry["rank"]
@@ -1680,6 +1683,21 @@ def generate_html(standings, tournament_names, player_data, player_events):
         part_display = int(entry["participation"]) if entry["participation"] == int(entry["participation"]) else f"{entry['participation']:.1f}"
 
         delta_cell = format_rank_delta(rank_changes.get(entry["player"]))
+
+        # Participation tooltip: checklist of events the player entered
+        played = player_events.get(entry["player"], set())
+        tip_items = "".join(
+            f'<span class="pt-item"><span class="pt-chk">&#10003;</span>{ev}'
+            f'<span class="pt-pp">+{int(part_pts_map.get(ev, PARTICIPATION_PTS))}</span></span>'
+            for ev in event_order if ev in played
+        )
+        if tip_items:
+            part_cell = (f'<td class="pts part-cell">{part_display}'
+                         f'<span class="part-tip"><span class="part-tip-h">Events Entered</span>'
+                         f'{tip_items}</span></td>')
+        else:
+            part_cell = f'<td class="pts">{part_display}</td>'
+
         rows_html += f"""
         <tr>
             <td class="rank">{rank_display}</td>
@@ -1687,7 +1705,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
             <td class="player">{entry['player']}</td>
             {tourney_cells}
             <td class="events">{entry['events']}</td>
-            <td class="pts">{part_display}</td>
+            {part_cell}
             <td class="total">{total_display}</td>
         </tr>"""
 
@@ -2268,12 +2286,105 @@ def generate_html(standings, tournament_names, player_data, player_events):
     }}
 
 
+    /* ── Smooth anchor scrolling ── */
+    html {{ scroll-behavior: smooth; }}
+    .container {{ scroll-margin-top: 14px; }}
+
+    /* ── Vertical Table of Contents ── */
+    .toc {{
+        position: fixed; top: 50%; left: 16px; transform: translateY(-50%);
+        z-index: 50; background: #fff; border: 1px solid #dde3da;
+        border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+        padding: 10px 8px; width: 152px; display: none;
+    }}
+    .toc-title {{
+        font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+        color: #888; font-weight: 700; padding: 2px 10px 8px;
+    }}
+    .toc a {{
+        display: block; padding: 7px 10px; margin: 1px 0;
+        font-size: 13px; color: #264636; text-decoration: none;
+        border-radius: 6px; border-left: 3px solid transparent;
+    }}
+    .toc a:hover {{ background: #f0f7f2; }}
+    .toc a.active {{
+        background: #f0f7f2; color: #1a472a; font-weight: 700;
+        border-left-color: #1a472a;
+    }}
+    .toc-toggle {{
+        position: fixed; left: 14px; bottom: 16px; z-index: 51;
+        width: 46px; height: 46px; border-radius: 50%;
+        background: #1a472a; color: #fff; border: none; cursor: pointer;
+        font-size: 20px; box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+        align-items: center; justify-content: center; display: none;
+    }}
+    /* Wide screens: persistent TOC in the left gutter */
+    @media (min-width: 1540px) {{
+        .toc {{ display: block; }}
+    }}
+    /* Narrow screens: floating toggle opens the TOC as an overlay */
+    @media (max-width: 1539px) {{
+        .toc-toggle {{ display: flex; }}
+        .toc {{ top: auto; bottom: 72px; left: 14px; transform: none; }}
+        .toc.open {{ display: block; }}
+    }}
+
+    /* ── Find-your-name search ── */
+    .standings-search {{
+        display: flex; gap: 8px; align-items: center;
+        padding: 12px 16px 6px; max-width: 460px;
+    }}
+    .standings-search input {{
+        flex: 1; padding: 9px 12px; font-size: 14px;
+        border: 1px solid #cdd6cf; border-radius: 8px; outline: none;
+    }}
+    .standings-search input:focus {{ border-color: #1a472a; box-shadow: 0 0 0 2px #e2efe7; }}
+    .standings-search button {{
+        padding: 9px 12px; border: 1px solid #cdd6cf; border-radius: 8px;
+        background: #f5f5f5; cursor: pointer; font-size: 14px; color: #555;
+    }}
+    .search-count {{ font-size: 12px; color: #888; white-space: nowrap; }}
+    tbody.searching tr.has-detail:not(.match) {{ opacity: 0.3; }}
+    tr.match > td {{ background: #fff6d6 !important; }}
+    tr.match > td.total {{ background: #fceaa8 !important; }}
+
+    /* ── Participation hover checklist ── */
+    td.part-cell {{ position: relative; cursor: help; }}
+    td.part-cell > span.part-tip {{
+        display: none; position: absolute; right: 4px; top: 100%;
+        z-index: 60; background: #fff; border: 1px solid #dde3da;
+        border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+        padding: 8px 10px; min-width: 190px; text-align: left;
+    }}
+    td.part-cell:hover > span.part-tip {{ display: block; }}
+    .part-tip-h {{
+        display: block; font-size: 10px; text-transform: uppercase;
+        letter-spacing: 0.5px; color: #888; font-weight: 700;
+        margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid #eee;
+    }}
+    .pt-item {{
+        display: flex; align-items: center; gap: 6px;
+        font-size: 12px; color: #264636; padding: 2px 0; white-space: nowrap;
+    }}
+    .pt-chk {{ color: #1a7f3e; font-weight: 700; }}
+    .pt-pp {{ margin-left: auto; color: #1a472a; font-weight: 700; padding-left: 16px; }}
+
 </style>
 </head>
 <body>
 
+<nav class="toc" id="toc">
+    <div class="toc-title">Jump to</div>
+    <a href="#overview" data-sec="overview">Overview</a>
+    <a href="#standings" data-sec="standings">Full Standings</a>
+    <a href="#schedule" data-sec="schedule">Schedule</a>
+    <a href="#spotlight" data-sec="spotlight">Event Spotlight</a>
+    <a href="#appendix" data-sec="appendix">Scoring</a>
+</nav>
+<button class="toc-toggle" id="tocToggle" aria-label="Jump to section">&#9776;</button>
+
 <!-- PAGE 1: Overview -->
-<div class="container">
+<div class="container" id="overview">
     <div class="header">
         <h1>MGA Ryder Cup Points Standings</h1>
         <div class="subtitle">2025-26 Season - Updated {now}</div>
@@ -2282,12 +2393,17 @@ def generate_html(standings, tournament_names, player_data, player_events):
 </div>
 
 <!-- Full Standings -->
-<div class="container standings-container">
+<div class="container standings-container" id="standings">
     <div class="header">
         <h1>Full Standings</h1>
         <div class="subtitle">{len(standings)} Players - 2025-26 Season</div>
     </div>
     <div class="mobile-tip">Tap a player to see event-by-event points</div>
+    <div class="standings-search">
+        <input id="nameSearch" type="text" placeholder="Find your name..." autocomplete="off" spellcheck="false">
+        <button id="nameClear" type="button">Clear</button>
+        <span class="search-count" id="searchCount"></span>
+    </div>
     <div class="table-wrapper">
         <table>
             <thead>
@@ -2316,7 +2432,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
 </div>
 
 <!-- Season Schedule & Points -->
-<div class="container schedule-container">
+<div class="container schedule-container" id="schedule">
     <div class="header" style="padding: 12px 30px;">
         <h1 style="font-size: 20px;">Season Schedule &amp; Points</h1>
         <div class="subtitle">Full Tournament Calendar</div>
@@ -2327,7 +2443,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
 </div>
 
 <!-- Event Spotlight -->
-<div class="container spotlight-container">
+<div class="container spotlight-container" id="spotlight">
     <div class="header">
         <h1>Event Spotlight: {latest_event_name}</h1>
         <div class="subtitle">Most Recent Tournament</div>
@@ -2336,7 +2452,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
 </div>
 
 <!-- APPENDIX: Scoring Breakdown -->
-<div class="container appendix-container">
+<div class="container appendix-container" id="appendix">
     <div class="header">
         <h1>Appendix: Scoring Breakdown</h1>
         <div class="subtitle">Ryder Cup Points Structure - 2025-26 Season</div>
@@ -2401,6 +2517,73 @@ def generate_html(standings, tournament_names, player_data, player_events):
             caret.textContent = '\\u25BE';
         }});
     }});
+}})();
+</script>
+<script>
+(function () {{
+    // ── TOC: active-section highlight + mobile toggle ──
+    var toc = document.getElementById('toc');
+    var toggle = document.getElementById('tocToggle');
+    var links = toc ? Array.prototype.slice.call(toc.querySelectorAll('a')) : [];
+    var sections = ['overview','standings','schedule','spotlight','appendix']
+        .map(function (id) {{ return document.getElementById(id); }})
+        .filter(Boolean);
+
+    if (toggle && toc) {{
+        toggle.addEventListener('click', function () {{ toc.classList.toggle('open'); }});
+    }}
+    links.forEach(function (a) {{
+        a.addEventListener('click', function () {{ toc.classList.remove('open'); }});
+    }});
+
+    if ('IntersectionObserver' in window && sections.length) {{
+        var byId = {{}};
+        links.forEach(function (a) {{ byId[a.getAttribute('data-sec')] = a; }});
+        var obs = new IntersectionObserver(function (entries) {{
+            entries.forEach(function (en) {{
+                if (en.isIntersecting) {{
+                    links.forEach(function (a) {{ a.classList.remove('active'); }});
+                    if (byId[en.target.id]) byId[en.target.id].classList.add('active');
+                }}
+            }});
+        }}, {{ rootMargin: '-45% 0px -50% 0px', threshold: 0 }});
+        sections.forEach(function (s) {{ obs.observe(s); }});
+    }}
+
+    // ── Find-your-name search ──
+    var input = document.getElementById('nameSearch');
+    var clearBtn = document.getElementById('nameClear');
+    var countEl = document.getElementById('searchCount');
+    var tbody = document.querySelector('.standings-container tbody');
+    if (input && tbody) {{
+        function run() {{
+            var q = input.value.trim().toLowerCase();
+            var rows = tbody.querySelectorAll('tr.has-detail');
+            var first = null, n = 0;
+            rows.forEach(function (r) {{ r.classList.remove('match'); }});
+            if (!q) {{
+                tbody.classList.remove('searching');
+                if (countEl) countEl.textContent = '';
+                return;
+            }}
+            tbody.classList.add('searching');
+            rows.forEach(function (r) {{
+                var pc = r.querySelector('td.player');
+                var name = pc ? pc.textContent.toLowerCase() : '';
+                if (name.indexOf(q) !== -1) {{
+                    r.classList.add('match');
+                    n++;
+                    if (!first) first = r;
+                }}
+            }});
+            if (countEl) countEl.textContent = n ? (n + ' match' + (n > 1 ? 'es' : '')) : 'no matches';
+            if (first) first.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+        }}
+        input.addEventListener('input', run);
+        if (clearBtn) clearBtn.addEventListener('click', function () {{
+            input.value = ''; run(); input.focus();
+        }});
+    }}
 }})();
 </script>
 <script data-goatcounter="https://mga-eldorado.goatcounter.com/count"
