@@ -2379,7 +2379,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
     <a href="#standings" data-sec="standings">Full Standings</a>
     <a href="#schedule" data-sec="schedule">Schedule</a>
     <a href="#spotlight" data-sec="spotlight">Event Spotlight</a>
-    <a href="#appendix" data-sec="appendix">Scoring</a>
+    <a href="#appendix" data-sec="appendix">Points</a>
 </nav>
 <button class="toc-toggle" id="tocToggle" aria-label="Jump to section">&#9776;</button>
 
@@ -2451,10 +2451,10 @@ def generate_html(standings, tournament_names, player_data, player_events):
     {build_event_spotlight_html(player_data, player_events)}
 </div>
 
-<!-- APPENDIX: Scoring Breakdown -->
+<!-- APPENDIX: Points Breakdown -->
 <div class="container appendix-container" id="appendix">
     <div class="header">
-        <h1>Appendix: Scoring Breakdown</h1>
+        <h1>Appendix: Points Breakdown</h1>
         <div class="subtitle">Ryder Cup Points Structure - 2025-26 Season</div>
     </div>
     <div class="appendix">
