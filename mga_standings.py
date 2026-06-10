@@ -1556,12 +1556,12 @@ def build_season_schedule_html():
             if not info:
                 continue
             all_rows += sched_row(
-                info["next_date"], f'{info["label"]} - {info["next_round"]}',
+                "", f'{info["label"]} - {info["next_round"]}',
                 fmt_type(info["team_size"]), "-", "-",
-                "status-next", "Next Round")
+                "status-next", "Next Round", hide_date=True)
         all_rows += f"""
                 <tr class="sched-note-row">
-                    <td colspan="6" class="sched-note">Rounds 1 and 2 are complete and scored (participation plus points per round won). Dates shown are the next scheduled round from the bracket; points for the remaining rounds will be added as they are played.</td>
+                    <td colspan="6" class="sched-note">Rounds 1 and 2 are complete and scored (participation plus points per round won). Points for the remaining rounds will be added as they are played.</td>
                 </tr>"""
 
     # ── Upcoming rows ──
