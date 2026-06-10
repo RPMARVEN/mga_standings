@@ -26,16 +26,16 @@ COURSE_NAME = "Eldorado Country Club"
 # (display_name, sheet_name, event_type, team_size, places_paid, has_flights, date_str, participation_pts, season)
 TOURNAMENTS = [
     # ── 2025-26 Season ──
-    ("Member-Member",          "Member-Member 2025", "2man_mm",  2,  3,  False, "2025-11-01", 25,  "2025-26"),
+    ("Member-Member '25",      "Member-Member 2025", "2man_mm",  2,  3,  False, "2025-11-01", 25,  "2025-26"),
     ("2-Man Scramble",         "2-Man Scramble",   "2man",       2,  4,  True,  "2025-12-06", 10,  "2025-26"),
     ("ABCD Scramble",          "ABCD Scramble",    "4man",       4,  5,  False, "2026-01-10", 10,  "2025-26"),
     ("2-Man Shamble",          "2-Man Shamble",    "2man",       2,  4,  True,  "2026-02-21", 10,  "2025-26"),
     ("Lonely Guy - Qualifier", None,               "lonely_guy", 1,  0,  False, "2026-03-07", 0,  "2025-26"),
-    ("Lonely Guy - First Round", None,               "lonely_guy_mp", 1,  0,  False, None, 50,  "2025-26"),
-    ("2 Man Match Play - First Round", None,               "2man_mp", 2,  0,  False, None, 25,  "2025-26"),
     ("Quota",                  "Quota",            "individual", 1,  3,  True,  "2026-04-11", 10,  "2025-26"),
     ("The Gerald",             "The Gerald",       "individual", 1,  3,  True,  "2026-05-02", 10,  "2025-26"),
-    ("Member/Member",          None,               "2man_mm",    2,  3,  False, "2026-06-06", 25,  "2025-26"),
+    ("Lonely Guy (R1-2)",      None,               "lonely_guy_mp", 1,  0,  False, "2026-05-10", 50,  "2025-26"),
+    ("2 Man Match Play (R1-2)", None,              "2man_mp", 2,  0,  False, "2026-05-11", 25,  "2025-26"),
+    ("Member-Member '26",      "Member-Member 2026", "2man_mm",  2,  3,  True,  "2026-06-06", 25,  "2025-26"),
     ("Presidents Cup",         None,               "presidents", 1,  5,  False, "2026-07-11", 50,  "2025-26"),
     ("6-6-6",                  None,               "tbd",        0,  0,  False, "2026-08-08", 10,  "2025-26"),
     ("Eldo Cup",               None,               "eldo_cup",   0,  0,  False, "2026-09-18", 20,  "2025-26"),
@@ -52,13 +52,134 @@ SCHEDULE_NOTES = {
 }
 
 MULTI_DAY_END = {
-    "Member-Member": "2025-11-02",
-    "Member/Member": "2026-06-07",
+    "Member-Member '25": "2025-11-02",
+    "Member-Member '26": "2026-06-07",
     "Presidents Cup": "2026-07-12",
     "Eldo Cup": "2026-09-20",
 }
 
 CANCELLED_EVENTS = {"Lonely Guy - Qualifier"}
+
+# ── Match-play bracket results ───────────────────────────────────────────────
+# Entered manually from the GolfGenius bracket JPGs (Lonely_Guy_*.jpg,
+# 2_Man_Match_Play_*.jpg). Only rounds 1 and 2 are complete; later rounds get
+# their own "(Finals)" tournament entries when they finish.
+#
+# Per-player scoring (RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx ladder):
+#   - Participation (set per-tournament in TOURNAMENTS) to EVERY entrant.
+#   - round_pts[r] added for each round r the player/team WON.
+#   Lonely Guy:  64-player field, win R1 -> Field/32 (+50), win R2 -> Field/16 (+50).
+#   2 Man MP:    32-team field,   win R1 -> Field/16 (+25), win R2 -> Field/8 (+25).
+# Names are normalized to the canonical "Last, First" roster used across events.
+MATCH_PLAY_TYPES = {"lonely_guy_mp", "2man_mp"}
+
+MATCH_PLAY_RESULTS = {
+    "Lonely Guy (R1-2)": {
+        "round_pts": [50, 50],
+        "entrants": [
+            # 32 R1 matches (winner listed first in each pair)
+            "Parks, Ryan", "Trevino, Bradley",
+            "Harnett, William", "Dorrance, Will",
+            "Wojnas, Jay", "Lanford, Mike",
+            "Ludwig, George", "Collins, Don",
+            "Harper, Ron", "Byrns, Ray",
+            "Jones, Brent", "Phillips, Jason",
+            "Russell, Jr", "Kelley, Mike",
+            "Cottam, Ryan", "Tryggestad, Devon",
+            "Quarles, Aaron", "Badgley, Rick",
+            "Bolen, Trey", "Peirson, Matt",
+            "Fry, Brett", "Rush, Jim",
+            "Wells, Daniel", "McCall, Cam",
+            "Parks, Mike", "Nelson, Brandon",
+            "Coffin, Greg", "Liepins, Eric",
+            "Donovan, John", "Girot, Robert",
+            "Bruegel, Michael", "Novich, Darren",
+            "Newbrough, Stu", "Hawley, Clay",
+            "Spencer, Steve", "Novak, Dite",
+            "Finnin, Michael", "Cross, Jeremy",
+            "Lowe, Kevin", "Dunsworth, Michael",
+            "Harless, Garrett", "Mendoza, Daniel",
+            "Girot, Geoffrey", "Tredinnick, Rick",
+            "Brown, Chris", "Ampaipitakwong, Pete",
+            "Finn, Kelly", "Agnew, Mark",
+            "Dowling, Patrick", "Weiss, Brian",
+            "Miles, Ryan", "Recker, Thomas",
+            "Anders, Ken", "Kiernan, John",
+            "Bennett, Dustan", "Lavalette, John",
+            "Morrone, Jeff", "Flanders, Andrew",
+            "Locke, Tom", "Thomas, Bobby",
+            "Butler, Terry", "Moore, Joseph",
+            "Michelsen, John", "Larkin, Tripp",
+        ],
+        "round_winners": [
+            # R1 winners (32)
+            [
+                "Parks, Ryan", "Harnett, William", "Wojnas, Jay", "Ludwig, George",
+                "Harper, Ron", "Jones, Brent", "Russell, Jr", "Cottam, Ryan",
+                "Quarles, Aaron", "Bolen, Trey", "Fry, Brett", "Wells, Daniel",
+                "Parks, Mike", "Coffin, Greg", "Donovan, John", "Bruegel, Michael",
+                "Newbrough, Stu", "Spencer, Steve", "Finnin, Michael", "Lowe, Kevin",
+                "Harless, Garrett", "Girot, Geoffrey", "Brown, Chris", "Finn, Kelly",
+                "Dowling, Patrick", "Miles, Ryan", "Anders, Ken", "Bennett, Dustan",
+                "Morrone, Jeff", "Locke, Tom", "Butler, Terry", "Michelsen, John",
+            ],
+            # R2 winners (16)
+            [
+                "Harnett, William", "Ludwig, George", "Jones, Brent", "Cottam, Ryan",
+                "Quarles, Aaron", "Wells, Daniel", "Parks, Mike", "Bruegel, Michael",
+                "Spencer, Steve", "Lowe, Kevin", "Harless, Garrett", "Brown, Chris",
+                "Miles, Ryan", "Anders, Ken", "Morrone, Jeff", "Butler, Terry",
+            ],
+        ],
+    },
+    "2 Man Match Play (R1-2)": {
+        "round_pts": [25, 25],
+        "entrants": [
+            # 32 R1 matches (winner listed first in each pair)
+            "Harless, Garrett + Harnett, William", "Girot, Geoffrey + Girot, Robert",
+            "Brown, Chris + Finnin, Michael", "Tryggestad, Devon + Cross, Jeremy",
+            "Ludwig, George + Novak, Dite", "Agnew, Mark + Morrone, Jeff",
+            "Trevino, Bradley + Quarles, Aaron", "Alt, Kyle + Switser, Chris",
+            "Dunsworth, Michael + Wells, Daniel", "Dowling, Patrick + Ampaipitakwong, Pete",
+            "Wojnas, Jay + Locke, Tom", "Terranova, Adrian + Newbrough, Stu",
+            "Dorrance, Will + Springer, Chris", "Rush, Jim + Avila, Tom",
+            "Lang, Stuart + Adler, John", "Bausch, Marty + Thomas, Bobby",
+            "Anders, Ken + Kiernan, John", "Parks, Mike + Cottam, Ryan",
+            "Byrns, Ray + Desing, Patrick", "Bolen, Trey + Mueller, Shawn",
+            "Coffin, Greg + Hawley, Clay", "Jones, Brent + Lowe, Kevin",
+            "Swartz, Michael + Spencer, Steve", "Butler, Terry + Kelley, Mike",
+            "Jones, Steve + Meredith, Mike", "Phillips, Jason + Larkin, Tripp",
+            "Bruegel, Michael + Strickland, Joshua", "Nelson, Brandon + Badgley, Rick",
+            "Recker, Thomas + Russell, Jr", "Wood, Peter + Lanford, Mike",
+            "Collins, Don + Lavalette, John", "Novich, Darren + Reyes, Marvin",
+        ],
+        "round_winners": [
+            # R1 winning teams (16)
+            [
+                "Harless, Garrett + Harnett, William", "Alt, Kyle + Switser, Chris",
+                "Dunsworth, Michael + Wells, Daniel", "Dorrance, Will + Springer, Chris",
+                "Rush, Jim + Avila, Tom", "Anders, Ken + Kiernan, John",
+                "Parks, Mike + Cottam, Ryan", "Coffin, Greg + Hawley, Clay",
+                "Jones, Brent + Lowe, Kevin", "Swartz, Michael + Spencer, Steve",
+                "Phillips, Jason + Larkin, Tripp", "Bruegel, Michael + Strickland, Joshua",
+                "Nelson, Brandon + Badgley, Rick", "Recker, Thomas + Russell, Jr",
+                "Wood, Peter + Lanford, Mike", "Collins, Don + Lavalette, John",
+            ],
+            # R2 winning teams (8)
+            [
+                "Dunsworth, Michael + Wells, Daniel", "Dorrance, Will + Springer, Chris",
+                "Rush, Jim + Avila, Tom", "Anders, Ken + Kiernan, John",
+                "Jones, Brent + Lowe, Kevin", "Swartz, Michael + Spencer, Steve",
+                "Nelson, Brandon + Badgley, Rick", "Collins, Don + Lavalette, John",
+            ],
+        ],
+    },
+}
+
+
+def event_has_data(t):
+    """True if a tournament has results to score: a real sheet OR match-play bracket data."""
+    return t[1] is not None or (t[2] in MATCH_PLAY_TYPES and t[0] in MATCH_PLAY_RESULTS)
 
 # Points tables (per-player values, already divided)
 # From "RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx"
@@ -409,6 +530,22 @@ def process_all():
     player_events = defaultdict(set)
 
     for display_name, sheet_name, event_type, team_size, places_paid, has_flights, _date, _part_pts, _season in TOURNAMENTS:
+        # Match-play bracket events (scored from MATCH_PLAY_RESULTS, no sheet)
+        if event_type in MATCH_PLAY_TYPES and display_name in MATCH_PLAY_RESULTS:
+            mp = MATCH_PLAY_RESULTS[display_name]
+            all_players = set()
+            for team in mp["entrants"]:
+                all_players.update(split_players(team))
+            for r, winners in enumerate(mp["round_winners"]):
+                pts = mp["round_pts"][r]
+                for team in winners:
+                    for player in split_players(team):
+                        player_data[player][display_name] += pts
+            for player in all_players:
+                player_data[player][display_name] += 0  # ensure column key exists
+                player_events[player].add(display_name)
+            continue
+
         if sheet_name is None:
             continue  # placeholder tournament
         if sheet_name not in wb.sheetnames:
@@ -463,7 +600,7 @@ def process_all():
 
 def build_standings(player_data, player_events):
     """Build sorted standings list."""
-    tournament_names = [t[0] for t in TOURNAMENTS if t[1] is not None]
+    tournament_names = [t[0] for t in TOURNAMENTS if event_has_data(t)]
     part_pts_map = {t[0]: t[7] for t in TOURNAMENTS}
 
     standings = []
@@ -993,36 +1130,52 @@ def build_results_html():
 
         if has_flights:
             flights = parse_flighted_sheet(ws)
+            # Detect Member-Member-style layout: a "Team" column plus a cumulative
+            # "Points" total column (no To Par / Net). Render Pos | Team | Points.
+            mm_points = False
+            for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=True):
+                if (len(row) >= 9 and row[8] and str(row[8]).strip().lower() == "points"
+                        and row[2] and str(row[2]).strip().lower() == "team"):
+                    mm_points = True
+                    break
             flights_html = ""
             for fi, flight_rows in enumerate(flights, 1):
                 rows_html = ""
                 for vals in flight_rows:
                     pos_val = vals[1]
                     players_str = vals[2]
-                    score = vals[5] if len(vals) > 5 else vals[4] if len(vals) > 4 else ""
-                    to_par = vals[3] if len(vals) > 3 else ""
                     if pos_val is None or players_str is None:
                         continue
                     pos_display = str(pos_val).strip()
-                    to_par_display = str(to_par) if to_par is not None else ""
-                    score_display = str(score) if score is not None else ""
-                    rows_html += f"""
+                    if mm_points:
+                        total = vals[8] if len(vals) > 8 and vals[8] is not None else ""
+                        rows_html += f"""
+                        <tr>
+                            <td class="rank">{pos_display}</td>
+                            <td class="player">{players_str}</td>
+                            <td class="pts">{total}</td>
+                        </tr>"""
+                    else:
+                        score = vals[5] if len(vals) > 5 else vals[4] if len(vals) > 4 else ""
+                        to_par = vals[3] if len(vals) > 3 else ""
+                        to_par_display = str(to_par) if to_par is not None else ""
+                        score_display = str(score) if score is not None else ""
+                        rows_html += f"""
                         <tr>
                             <td class="rank">{pos_display}</td>
                             <td class="player">{players_str}</td>
                             <td class="pts">{to_par_display}</td>
                             <td class="pts">{score_display}</td>
                         </tr>"""
+                if mm_points:
+                    head = "<th>Pos</th><th>Players</th><th>Points</th>"
+                else:
+                    head = "<th>Pos</th><th>Players</th><th>To Par</th><th>Net</th>"
                 flights_html += f"""
                     <h4 class="flight-header">Flight {fi}</h4>
                     <table class="results-table">
                         <thead>
-                            <tr>
-                                <th>Pos</th>
-                                <th>Players</th>
-                                <th>To Par</th>
-                                <th>Net</th>
-                            </tr>
+                            <tr>{head}</tr>
                         </thead>
                         <tbody>{rows_html}</tbody>
                     </table>"""
@@ -1286,9 +1439,9 @@ def build_season_schedule_html():
 
     # Helper for 1st place points (always per-player, no caveats)
     def fmt_first(name, etype, places, team_size):
-        if "Lonely Guy - First Round" in name:
+        if "Lonely Guy" in name:
             return "350"
-        if "2 Man Match Play - First Round" in name:
+        if "2 Man Match Play" in name:
             return "175"
         pts_table = POINTS_TABLE.get((etype, places), {})
         first_pp = pts_table.get(1, 0)
@@ -1307,7 +1460,7 @@ def build_season_schedule_html():
         name, sheet, etype, team_size, places, has_flights, date_str, part_pts, season = t
         if name in CANCELLED_EVENTS:
             cancelled.append(t)
-        elif "First Round" in name:
+        elif etype in MATCH_PLAY_TYPES:
             ongoing.append(t)
         elif sheet is not None:
             completed.append(t)
@@ -1357,14 +1510,14 @@ def build_season_schedule_html():
         all_rows += section_header("Ongoing")
         for t in ongoing:
             name, sheet, etype, team_size, places, has_flights, date_str, part_pts, season = t
-            display_name = name.replace("- First Round", "- 1st &amp; 2nd Rounds")
+            display_name = name.replace("(R1-2)", "- Rounds 1-2 Scored")
             all_rows += sched_row(
                 "", display_name, fmt_type(team_size),
                 fmt_first(name, etype, places, team_size), str(part_pts),
                 "status-next", "In Progress", hide_date=True)
         all_rows += f"""
                 <tr class="sched-note-row">
-                    <td colspan="6" class="sched-note">All first round matches must be COMPLETED by SUNDAY, 4/12/26. Please feel free to schedule and play your 2nd round matches.</td>
+                    <td colspan="6" class="sched-note">Rounds 1 and 2 are complete and scored (participation plus points per round won). Remaining rounds will be added as a separate &quot;Finals&quot; line once played.</td>
                 </tr>"""
 
     # ── Upcoming rows ──
@@ -1496,7 +1649,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
 
     # Build grouped section for participation-only players
     # Build participation points reference for footer
-    played_tournaments = [(t[0], t[7]) for t in TOURNAMENTS if t[1] is not None]
+    played_tournaments = [(t[0], t[7]) for t in TOURNAMENTS if event_has_data(t)]
     part_by_value = {}
     for tname, ppts in played_tournaments:
         part_by_value.setdefault(ppts, []).append(tname)
