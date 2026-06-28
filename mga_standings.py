@@ -2222,6 +2222,22 @@ def generate_html(standings, tournament_names, player_data, player_events):
         .next-up {{ margin-top: 12px; padding: 10px 12px; }}
         .next-up-name {{ font-size: 16px; }}
         .stat-number {{ font-size: 22px; }}
+        /* Overview block: let its contents shrink/wrap to phone width instead of
+           overflowing and getting clipped by .container{{overflow:hidden}}.
+           The grid items (overview-left/right) and the inner stat cards need
+           min-width:0 so the 1fr column can shrink below their min-content. */
+        .overview-left, .overview-right {{ min-width: 0; }}
+        .stat-grid > .stat-card {{ min-width: 0; }}
+        /* Weather/conditions cards: wrap to multiple rows instead of one no-wrap strip */
+        .fc-container {{ flex-wrap: wrap; gap: 8px; }}
+        .fc-card {{ flex: 1 1 calc(33.333% - 8px); max-width: none; min-width: 0; }}
+        /* Top-15 leaderboard: allow player names to wrap so the table can narrow */
+        .top10-table {{ table-layout: fixed; }}
+        .top10-table td.player {{ white-space: normal; }}
+        /* Season Schedule table: fixed layout + let the date wrap so it fits phone width */
+        .schedule-table {{ table-layout: fixed; }}
+        .schedule-table td, .schedule-table thead th {{ padding: 5px 4px; }}
+        .sched-date {{ white-space: normal; }}
     }}
     /* ── Narrow screens: standings collapses to Rank / +/- / Player / Total ──
        Breakpoint is 1024px (not 768) because the full 12-column table needs
