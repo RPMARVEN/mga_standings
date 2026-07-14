@@ -36,7 +36,7 @@ TOURNAMENTS = [
     ("Lonely Guy (R1-2)",      None,               "lonely_guy_mp", 1,  0,  False, "2026-05-10", 50,  "2025-26"),
     ("2 Man Match Play (R1-2)", None,              "2man_mp", 2,  0,  False, "2026-05-11", 25,  "2025-26"),
     ("Member-Member '26",      "Member-Member 2026", "2man_mm",  2,  3,  True,  "2026-06-06", 25,  "2025-26"),
-    ("Presidents Cup",         None,               "presidents", 1,  5,  False, "2026-07-11", 50,  "2025-26"),
+    ("Presidents Cup",         "Presidents Cup",   "presidents", 1,  5,  True,  "2026-07-11", 50,  "2025-26"),
     ("6-6-6",                  None,               "tbd",        0,  0,  False, "2026-08-08", 10,  "2025-26"),
     ("Eldo Cup",               None,               "eldo_cup",   0,  0,  False, "2026-09-18", 20,  "2025-26"),
     # ── 2026-27 Season ──
