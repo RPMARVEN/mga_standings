@@ -33,8 +33,8 @@ TOURNAMENTS = [
     ("Lonely Guy - Qualifier", None,               "lonely_guy", 1,  0,  False, "2026-03-07", 0,  "2025-26"),
     ("Quota",                  "Quota",            "individual", 1,  3,  True,  "2026-04-11", 10,  "2025-26"),
     ("The Gerald",             "The Gerald",       "individual", 1,  3,  True,  "2026-05-02", 10,  "2025-26"),
-    ("Lonely Guy (R1-2)",      None,               "lonely_guy_mp", 1,  0,  False, "2026-05-10", 50,  "2025-26"),
-    ("2 Man Match Play (R1-2)", None,              "2man_mp", 2,  0,  False, "2026-05-11", 25,  "2025-26"),
+    ("Lonely Guy",             None,               "lonely_guy_mp", 1,  0,  False, "2026-07-12", 50,  "2025-26"),
+    ("2 Man Match Play",       None,               "2man_mp", 2,  0,  False, "2026-05-11", 25,  "2025-26"),
     ("Member-Member '26",      "Member-Member 2026", "2man_mm",  2,  3,  True,  "2026-06-06", 25,  "2025-26"),
     ("Presidents Cup",         "Presidents Cup",   "presidents", 1,  5,  True,  "2026-07-11", 50,  "2025-26"),
     ("6-6-6",                  None,               "tbd",        0,  0,  False, "2026-08-08", 10,  "2025-26"),
@@ -62,20 +62,24 @@ CANCELLED_EVENTS = {"Lonely Guy - Qualifier"}
 
 # ── Match-play bracket results ───────────────────────────────────────────────
 # Entered manually from the GolfGenius bracket JPGs (sources/Lonely_Guy_*.jpg,
-# sources/2_Man_Match_Play_*.jpg). Only rounds 1 and 2 are complete; later rounds get
-# their own "(Finals)" tournament entries when they finish.
+# sources/2_Man_Match_Play_*.jpg). Each round win is scored as it completes;
+# remaining rounds are appended to round_winners as they are played.
 #
 # Per-player scoring (points_structure/RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx ladder):
 #   - Participation (set per-tournament in TOURNAMENTS) to EVERY entrant.
 #   - round_pts[r] added for each round r the player/team WON.
-#   Lonely Guy:  64-player field, win R1 -> Field/32 (+50), win R2 -> Field/16 (+50).
-#   2 Man MP:    32-team field,   win R1 -> Field/16 (+25), win R2 -> Field/8 (+25).
+#   Each round win is a flat step on the ladder (the 2x only applies at the
+#   Final/Champion, which are not yet played):
+#   Lonely Guy: 64-player field, +50/round. R1 Field/32, R2 Field/16,
+#               R3 Field/8 (Round of 16, Jun 14), R4 Field/4 (Quarterfinals, Jul 12).
+#   2 Man MP:   32-team field, +25/round. R1 Field/16, R2 Field/8,
+#               R3 Field/4 (Quarterfinals), R4 Field/2 (Semifinals -> finalists).
 # Names are normalized to the canonical "Last, First" roster used across events.
 MATCH_PLAY_TYPES = {"lonely_guy_mp", "2man_mp"}
 
 MATCH_PLAY_RESULTS = {
-    "Lonely Guy (R1-2)": {
-        "round_pts": [50, 50],
+    "Lonely Guy": {
+        "round_pts": [50, 50, 50, 50],
         "entrants": [
             # 32 R1 matches (winner listed first in each pair)
             "Parks, Ryan", "Trevino, Bradley",
@@ -130,10 +134,19 @@ MATCH_PLAY_RESULTS = {
                 "Spencer, Steve", "Lowe, Kevin", "Harless, Garrett", "Brown, Chris",
                 "Miles, Ryan", "Anders, Ken", "Morrone, Jeff", "Butler, Terry",
             ],
+            # R3 winners (8) - Round of 16, played Jun 14
+            [
+                "Harnett, William", "Jones, Brent", "Quarles, Aaron", "Bruegel, Michael",
+                "Lowe, Kevin", "Brown, Chris", "Anders, Ken", "Butler, Terry",
+            ],
+            # R4 winners (4) - Quarterfinals, played Jul 12 (semifinalists)
+            [
+                "Harnett, William", "Bruegel, Michael", "Brown, Chris", "Butler, Terry",
+            ],
         ],
     },
-    "2 Man Match Play (R1-2)": {
-        "round_pts": [25, 25],
+    "2 Man Match Play": {
+        "round_pts": [25, 25, 25, 25],
         "entrants": [
             # 32 R1 matches (winner listed first in each pair)
             "Harless, Garrett + Harnett, William", "Girot, Geoffrey + Girot, Robert",
@@ -172,6 +185,15 @@ MATCH_PLAY_RESULTS = {
                 "Jones, Brent + Lowe, Kevin", "Swartz, Michael + Spencer, Steve",
                 "Nelson, Brandon + Badgley, Rick", "Collins, Don + Lavalette, John",
             ],
+            # R3 winning teams (4) - Quarterfinals
+            [
+                "Anders, Ken + Kiernan, John", "Dorrance, Will + Springer, Chris",
+                "Collins, Don + Lavalette, John", "Jones, Brent + Lowe, Kevin",
+            ],
+            # R4 winning teams (2) - Semifinals (finalists)
+            [
+                "Dorrance, Will + Springer, Chris", "Jones, Brent + Lowe, Kevin",
+            ],
         ],
     },
 }
@@ -182,27 +204,29 @@ def event_has_data(t):
     return t[1] is not None or (t[2] in MATCH_PLAY_TYPES and t[0] in MATCH_PLAY_RESULTS)
 
 
-# Schedule display for the ongoing match-play brackets: rounds 1-2 are complete
-# (shown under Completed); the next round to be played (name + bracket date) is
-# shown under Ongoing. Update next_round / next_date as later rounds finish.
+# Schedule display for the ongoing match-play brackets: the completed rounds are
+# shown under Completed; the next round to be played is shown under Ongoing.
+# Update done_* and next_round / next_date as later rounds finish.
 MATCH_PLAY_ROUNDS = {
-    "Lonely Guy (R1-2)": {
+    "Lonely Guy": {
         "label": "Lonely Guy",
         "team_size": 1,
-        "r12_dates": "Apr 30 - May 10",
-        "r12_best": "150",   # max per-player banked through round 2
+        "done_dates": "Apr 30 - Jul 12",
+        "done_label": "Rounds 1-4",
+        "done_best": "250",   # max per-player banked through round 4 (50 part + 4x50)
         "part": "50",
-        "next_round": "Round of 16",   # 16 players remain -> 8
-        "next_date": "Jun 14",
+        "next_round": "Semifinals",   # 4 players remain -> 2
+        "next_date": "Aug 2",
     },
-    "2 Man Match Play (R1-2)": {
+    "2 Man Match Play": {
         "label": "2 Man Match Play",
         "team_size": 2,
-        "r12_dates": "Mar 21 - May 11",
-        "r12_best": "75",
+        "done_dates": "Mar 21 - Jul 12",
+        "done_label": "Rounds 1-4",
+        "done_best": "125",   # max per-player banked through round 4 (25 part + 4x25)
         "part": "25",
-        "next_round": "Quarterfinals",   # 8 teams remain -> 4
-        "next_date": "May 13",
+        "next_round": "Final",   # 2 finalists remain -> champion
+        "next_date": "TBD",
     },
 }
 
@@ -1544,8 +1568,8 @@ def build_season_schedule_html():
         if not info:
             continue
         all_rows += sched_row(
-            info["r12_dates"], f'{info["label"]} - Rounds 1 &amp; 2',
-            fmt_type(info["team_size"]), info["r12_best"], info["part"],
+            info["done_dates"], f'{info["label"]} - {info["done_label"]}',
+            fmt_type(info["team_size"]), info["done_best"], info["part"],
             "status-played", "Completed")
 
     # ── Ongoing rows (next match-play round to be played) ──
@@ -1561,7 +1585,7 @@ def build_season_schedule_html():
                 "status-next", "Next Round", hide_date=True)
         all_rows += f"""
                 <tr class="sched-note-row">
-                    <td colspan="6" class="sched-note">Rounds 1 and 2 are complete and scored (participation plus points per round won). Points for the remaining rounds will be added as they are played.</td>
+                    <td colspan="6" class="sched-note">Rounds 1 through 4 are complete and scored (participation plus points per round won). Points for the remaining rounds will be added as they are played.</td>
                 </tr>"""
 
     # ── Upcoming rows ──
