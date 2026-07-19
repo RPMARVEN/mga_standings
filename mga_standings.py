@@ -341,6 +341,70 @@ def split_players(players_str):
     return [p.strip() for p in parts if p.strip()]
 
 
+# ── Per-event result detail (shown in the tap/click-to-expand standings panel) ──
+def fmt_num(x):
+    """Whole numbers without a decimal, otherwise one decimal place."""
+    return int(x) if x == int(x) else f"{x:.1f}"
+
+
+def ordinal(n):
+    """1 -> '1st', 2 -> '2nd', 12 -> '12th'."""
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+
+def fmt_place(pos_val):
+    """Format a finishing position for display: ties keep 'T', others get an ordinal."""
+    num, is_tie = parse_position(pos_val)
+    if num is None:
+        return str(pos_val)
+    return f"T{num}" if is_tie else ordinal(num)
+
+
+def mp_badge(wins, field):
+    """Furthest round reached in a bracket, framed as an achievement.
+    field = number of bracket entries (64 for Lonely Guy, 32 for 2-Man)."""
+    size = field // (2 ** wins) if wins < field.bit_length() else 1
+    if size <= 1:
+        return "Champion"
+    if size == 2:
+        return "Finalist"
+    if size == 4:
+        return "Semifinalist"
+    if size == 8:
+        return "Quarterfinalist"
+    if wins == 0:
+        return "Round 1"
+    return f"Round of {size}"
+
+
+def mp_detail(wins, field, win_pts, part_pts):
+    """Detail line for a match-play entrant: badge + match wins + points."""
+    badge = mp_badge(wins, field)
+    if wins <= 0:
+        return f"{badge} · participation (+{int(part_pts)})"
+    plural = "win" if wins == 1 else "wins"
+    return (f"{badge} · {wins} match {plural} · "
+            f"+{fmt_num(win_pts)} (+{int(part_pts)} part.)")
+
+
+def stroke_detail(pos_val, pts, field=None, flight=None):
+    """Detail line for a stroke/placement entry: finish + where + points."""
+    place = fmt_place(pos_val)
+    if flight:
+        where = f"{place}, {flight}"
+    elif field:
+        where = f"{place} of {field}"
+    else:
+        where = place
+    if pts and pts > 0:
+        return f"{where} · +{fmt_num(pts)}"
+    return f"{where} · participation"
+
+
 def parse_flight_results(rows):
     """Parse rows for a single flight. Returns list of (position_str, [players])."""
     results = []
@@ -577,6 +641,8 @@ def process_all():
     player_data = defaultdict(lambda: defaultdict(float))
     # player -> set of tournament names they participated in
     player_events = defaultdict(set)
+    # player -> {tournament_name: human detail string for the expand panel}
+    player_detail = defaultdict(dict)
 
     for display_name, sheet_name, event_type, team_size, places_paid, has_flights, _date, _part_pts, _season in TOURNAMENTS:
         # Match-play bracket events (scored from MATCH_PLAY_RESULTS, no sheet)
@@ -585,14 +651,20 @@ def process_all():
             all_players = set()
             for team in mp["entrants"]:
                 all_players.update(split_players(team))
+            wins_by_player = defaultdict(int)
             for r, winners in enumerate(mp["round_winners"]):
                 pts = mp["round_pts"][r]
                 for team in winners:
                     for player in split_players(team):
                         player_data[player][display_name] += pts
+                        wins_by_player[player] += 1
+            field = len(mp["entrants"])
             for player in all_players:
                 player_data[player][display_name] += 0  # ensure column key exists
                 player_events[player].add(display_name)
+                w = wins_by_player.get(player, 0)
+                win_pts = sum(mp["round_pts"][:w])
+                player_detail[player][display_name] = mp_detail(w, field, win_pts, _part_pts)
             continue
 
         if sheet_name is None:
@@ -611,11 +683,16 @@ def process_all():
                 earned = pts.get(player, 0)
                 player_data[player][display_name] += earned
                 player_events[player].add(display_name)
+                if earned > 0:
+                    player_detail[player][display_name] = f"In the money · +{fmt_num(earned)}"
+                else:
+                    player_detail[player][display_name] = f"Participation (+{int(_part_pts)})"
             continue
 
         if has_flights:
             flights = parse_flighted_sheet(ws)
-            for flight_rows in flights:
+            for fidx, flight_rows in enumerate(flights):
+                flight_label = f"Flight {fidx + 1}"
                 flight_results = []
                 for vals in flight_rows:
                     pos_val = vals[1]
@@ -626,25 +703,26 @@ def process_all():
                     flight_results.append((pos_val, players))
 
                 pts = calc_points_for_flight(flight_results, event_type, places_paid)
-                all_players_in_flight = set()
-                for _, plist in flight_results:
-                    all_players_in_flight.update(plist)
-                for player in all_players_in_flight:
-                    earned = pts.get(player, 0)
-                    player_data[player][display_name] += earned
-                    player_events[player].add(display_name)
+                for pos_val, plist in flight_results:
+                    for player in plist:
+                        earned = pts.get(player, 0)
+                        player_data[player][display_name] += earned
+                        player_events[player].add(display_name)
+                        player_detail[player][display_name] = stroke_detail(
+                            pos_val, earned, flight=flight_label)
         else:
             results = parse_single_flight_sheet(ws)
             pts = calc_points_for_flight(results, event_type, places_paid)
-            all_players = set()
-            for _, plist in results:
-                all_players.update(plist)
-            for player in all_players:
-                earned = pts.get(player, 0)
-                player_data[player][display_name] += earned
-                player_events[player].add(display_name)
+            field = len(results)
+            for pos_val, plist in results:
+                for player in plist:
+                    earned = pts.get(player, 0)
+                    player_data[player][display_name] += earned
+                    player_events[player].add(display_name)
+                    player_detail[player][display_name] = stroke_detail(
+                        pos_val, earned, field=field)
 
-    return player_data, player_events
+    return player_data, player_events, player_detail
 
 
 def build_standings(player_data, player_events):
@@ -1669,7 +1747,7 @@ def calc_rank_changes(standings, player_data, player_events):
     return changes
 
 
-def generate_html(standings, tournament_names, player_data, player_events):
+def generate_html(standings, tournament_names, player_data, player_events, player_detail):
     """Generate standings HTML file."""
     now = datetime.now().strftime("%B %d, %Y %I:%M %p")
     rank_changes = calc_rank_changes(standings, player_data, player_events)
@@ -1685,6 +1763,18 @@ def generate_html(standings, tournament_names, player_data, player_events):
 
     part_pts_map = {t[0]: t[7] for t in TOURNAMENTS}
     event_order = [t[0] for t in TOURNAMENTS]
+
+    # Per-player, per-event detail for the expand panel: ordered list of
+    # [event, detail-string] pairs, only for events the player entered.
+    detail_map = {}
+    for entry in placement_standings:
+        p = entry["player"]
+        entered = player_events.get(p, set())
+        detail_map[p] = [
+            [ev, player_detail.get(p, {}).get(ev, "")]
+            for ev in event_order if ev in entered
+        ]
+    detail_json = json.dumps(detail_map)
 
     rows_html = ""
     for entry in placement_standings:
@@ -2214,10 +2304,45 @@ def generate_html(standings, tournament_names, player_data, player_events):
         flex-shrink: 0;
     }}
 
-    /* ── Mobile standings: tap-to-expand (defaults; activated under media query) ── */
-    .detail-row {{ display: none; }}
-    .detail-caret {{ display: none; }}
-    .mobile-tip {{ display: none; }}
+    /* ── Standings: compact card + tap/click-to-expand on ALL screens ──
+       The full per-event grid outgrows the page as events accumulate, so the
+       on-screen default is Rank / +- / Player / Total with a tap/click-to-expand
+       detail panel. The wide grid is restored only for print (see @media print). */
+    .standings-container table thead th,
+    .standings-container table tbody td {{ display: none; }}
+    .standings-container table thead th:nth-child(1),
+    .standings-container table thead th:nth-child(2),
+    .standings-container table thead th:nth-child(3),
+    .standings-container table thead th:last-child,
+    .standings-container table tbody td:nth-child(1),
+    .standings-container table tbody td:nth-child(2),
+    .standings-container table tbody td:nth-child(3),
+    .standings-container table tbody td:last-child {{ display: table-cell; }}
+
+    .standings-container td.player {{ white-space: normal; }}
+    .standings-container tbody tr.has-detail {{ cursor: pointer; }}
+    .detail-caret {{
+        display: inline-block; color: #1a472a; font-size: 9px;
+        margin-right: 4px; vertical-align: middle;
+    }}
+    .detail-row {{ display: table-row; }}
+    .detail-row > td {{
+        display: table-cell !important; background: #f0f7f2; padding: 8px 14px;
+    }}
+    .detail-grid {{ display: flex; flex-direction: column; }}
+    .detail-item {{ padding: 7px 2px; border-bottom: 1px solid #dde7e0; }}
+    .detail-item:last-child {{ border-bottom: none; }}
+    .detail-label {{
+        display: block; font-size: 10px; text-transform: uppercase;
+        letter-spacing: 0.5px; color: #888; font-weight: 700; margin-bottom: 2px;
+    }}
+    .detail-value {{ display: block; font-size: 13px; font-weight: 600; color: #1a472a; }}
+    .detail-value.empty {{ color: #bbb; font-weight: 400; }}
+    .mobile-tip {{
+        display: block; text-align: center; font-size: 12px; font-weight: 600;
+        color: #1a7f3e; background: #f0f7f2; padding: 8px 12px;
+        border-bottom: 1px solid #e0e8e2;
+    }}
 
     @media print {{
         body {{ background: #fff; padding: 0; }}
@@ -2228,6 +2353,11 @@ def generate_html(standings, tournament_names, player_data, player_events):
         /* Print keeps the full wide table with sticky headers */
         .standings-container,
         .standings-container .table-wrapper {{ overflow: visible; }}
+        /* Restore the full per-event grid; hide the compact-only affordances */
+        .standings-container table thead th,
+        .standings-container table tbody td {{ display: table-cell; }}
+        .standings-container td.player {{ white-space: nowrap; }}
+        .detail-caret, .detail-row, .mobile-tip {{ display: none !important; }}
     }}
     @media (max-width: 768px) {{
         body {{ padding: 8px; }}
@@ -2263,69 +2393,6 @@ def generate_html(standings, tournament_names, player_data, player_events):
         .schedule-table td, .schedule-table thead th {{ padding: 5px 4px; }}
         .sched-date {{ white-space: normal; }}
     }}
-    /* ── Narrow screens: standings collapses to Rank / +/- / Player / Total ──
-       Breakpoint is 1024px (not 768) because the full 12-column table needs
-       ~975px to render. Below that it would overflow the viewport, so we show
-       the collapsed card with tap-to-expand instead. */
-    @media screen and (max-width: 1024px) {{
-        /* Hide every standings cell, then re-show the four we keep + the detail row */
-        .standings-container table thead th,
-        .standings-container table tbody td {{ display: none; }}
-        .standings-container table thead th:nth-child(1),
-        .standings-container table thead th:nth-child(2),
-        .standings-container table thead th:nth-child(3),
-        .standings-container table thead th:last-child,
-        .standings-container table tbody td:nth-child(1),
-        .standings-container table tbody td:nth-child(2),
-        .standings-container table tbody td:nth-child(3),
-        .standings-container table tbody td:last-child {{ display: table-cell; }}
-
-        .standings-container td.player {{ white-space: normal; }}
-        .standings-container tbody tr.has-detail {{ cursor: pointer; }}
-        .detail-caret {{
-            display: inline-block;
-            color: #1a472a;
-            font-size: 9px;
-            margin-right: 4px;
-            vertical-align: middle;
-        }}
-
-        .detail-row {{ display: table-row; }}
-        .detail-row > td {{
-            display: table-cell !important;
-            background: #f0f7f2;
-            padding: 10px 14px;
-        }}
-        .detail-grid {{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px 18px;
-        }}
-        .detail-item {{
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            font-size: 12px;
-            border-bottom: 1px solid #dde7e0;
-            padding-bottom: 3px;
-        }}
-        .detail-label {{ color: #555; }}
-        .detail-value {{ font-weight: 700; color: #1a472a; }}
-        .detail-value.empty {{ color: #bbb; font-weight: 400; }}
-
-        .mobile-tip {{
-            display: block;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: #1a7f3e;
-            background: #f0f7f2;
-            padding: 8px 12px;
-            border-bottom: 1px solid #e0e8e2;
-        }}
-    }}
-
-
     /* ── Smooth anchor scrolling ── */
     html {{ scroll-behavior: smooth; }}
     .container {{ scroll-margin-top: 14px; }}
@@ -2438,7 +2505,7 @@ def generate_html(standings, tournament_names, player_data, player_events):
         <h1>Full Standings</h1>
         <div class="subtitle">{len(standings)} Players - 2025-26 Season</div>
     </div>
-    <div class="mobile-tip">Tap a player to see event-by-event points</div>
+    <div class="mobile-tip">Tap or click a player to see their event-by-event results</div>
     <div class="standings-search">
         <input id="nameSearch" type="text" placeholder="Find your name..." autocomplete="off" spellcheck="false">
         <button id="nameClear" type="button">Clear</button>
@@ -2503,22 +2570,24 @@ def generate_html(standings, tournament_names, player_data, player_events):
 </div>
 
 <script>
+var STANDINGS_DETAIL = {detail_json};
 (function () {{
     var table = document.querySelector('.standings-container table');
     if (!table) return;
 
-    var heads = table.querySelectorAll('thead th');
-    var labels = [];
-    for (var i = 0; i < heads.length; i++) labels.push(heads[i].textContent.trim());
-    var total = labels.length;
-    if (total < 5) return;
+    function esc(s) {{
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }}
 
     var rows = table.querySelectorAll('tbody tr');
     rows.forEach(function (row) {{
         var cells = row.children;
-        if (cells.length < total) return;            // skip footer / non-data rows
+        if (cells.length < 5) return;                // skip footer / non-data rows
         var playerCell = cells[2];
         if (!playerCell) return;
+        var name = playerCell.textContent.trim();
+        var detail = STANDINGS_DETAIL[name];
+        if (!detail || !detail.length) return;
 
         var caret = document.createElement('span');
         caret.className = 'detail-caret';
@@ -2527,7 +2596,6 @@ def generate_html(standings, tournament_names, player_data, player_events):
         row.classList.add('has-detail');
 
         row.addEventListener('click', function () {{
-            if (window.innerWidth > 1024) return;    // collapse only active on narrow screens
             var next = row.nextElementSibling;
             if (next && next.classList.contains('detail-row')) {{
                 next.parentNode.removeChild(next);
@@ -2536,13 +2604,13 @@ def generate_html(standings, tournament_names, player_data, player_events):
                 return;
             }}
             var html = '<div class="detail-grid">';
-            for (var j = 3; j < total - 1; j++) {{   // columns between Player and Total
-                var raw = cells[j] ? cells[j].textContent.trim() : '';
-                var isEmpty = (raw === '' || raw === '-');
+            for (var j = 0; j < detail.length; j++) {{
+                var ev = detail[j][0], txt = detail[j][1] || '';
+                var isEmpty = (txt === '');
                 html += '<div class="detail-item"><span class="detail-label">' +
-                        labels[j] + '</span><span class="detail-value' +
+                        esc(ev) + '</span><span class="detail-value' +
                         (isEmpty ? ' empty' : '') + '">' +
-                        (isEmpty ? '\\u2013' : raw) + '</span></div>';
+                        (isEmpty ? '\\u2013' : esc(txt)) + '</span></div>';
             }}
             html += '</div>';
 
@@ -2695,9 +2763,9 @@ def generate_pdf(html_path):
 
 
 if __name__ == "__main__":
-    player_data, player_events = process_all()
+    player_data, player_events, player_detail = process_all()
     standings, tournament_names = build_standings(player_data, player_events)
-    html_path = generate_html(standings, tournament_names, player_data, player_events)
+    html_path = generate_html(standings, tournament_names, player_data, player_events, player_detail)
     generate_pdf(html_path)
 
     # Quick summary

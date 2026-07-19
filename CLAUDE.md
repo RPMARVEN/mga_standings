@@ -84,8 +84,11 @@ Three sections in Season Schedule & Points:
 
 ## Standings
 
-- All players in one ranked table - no compact/abbreviated section
-- Columns: Rank | Player | [Tournament columns] | Events | Participation Pts | Total Pts
+- Full table has all columns: Rank | +/- | Player | [Tournament columns] | Events | Participation Pts | Total Pts
+- On screen (all widths) the table collapses to a compact card - Rank | +/- | Player | Total - with a tap/click-to-expand detail panel per player. The full wide grid is restored only for print. This keeps it from overflowing as tournament columns accumulate.
+- Detail panel: one line per event the player entered, built from `player_detail` (computed in `process_all`) and injected as the `STANDINGS_DETAIL` JSON blob for the expander JS.
+  - Match play: achievement badge + match wins + points, e.g. "Semifinalist - 4 match wins - +200 (+50 part.)". Badge from `mp_badge(wins, field)`: Champion / Finalist / Semifinalist / Quarterfinalist / Round of N / Round 1.
+  - Stroke/flighted: finish + where + points, e.g. "1st, Flight 3 - +100" or "T2 of 15 - +50"; no placement points shows "... - participation".
 - Footer (tfoot): right-aligned participation pts reference, repeats on every printed page
 
 ## Formatting Standards
