@@ -9,3 +9,6 @@ mga_standings.pdf
 archive/
 sources/
 points_structure/
+
+# Private local notes (never publish to the public Pages repo)
+IDEAS.md
