@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+
+# Generated PDF (regenerate via mga_standings.py)
+mga_standings.pdf
+
+# Local-only working folders (not part of the deployed site)
+archive/
+sources/
+points_structure/

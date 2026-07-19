@@ -61,11 +61,11 @@ MULTI_DAY_END = {
 CANCELLED_EVENTS = {"Lonely Guy - Qualifier"}
 
 # ── Match-play bracket results ───────────────────────────────────────────────
-# Entered manually from the GolfGenius bracket JPGs (Lonely_Guy_*.jpg,
-# 2_Man_Match_Play_*.jpg). Only rounds 1 and 2 are complete; later rounds get
+# Entered manually from the GolfGenius bracket JPGs (sources/Lonely_Guy_*.jpg,
+# sources/2_Man_Match_Play_*.jpg). Only rounds 1 and 2 are complete; later rounds get
 # their own "(Finals)" tournament entries when they finish.
 #
-# Per-player scoring (RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx ladder):
+# Per-player scoring (points_structure/RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx ladder):
 #   - Participation (set per-tournament in TOURNAMENTS) to EVERY entrant.
 #   - round_pts[r] added for each round r the player/team WON.
 #   Lonely Guy:  64-player field, win R1 -> Field/32 (+50), win R2 -> Field/16 (+50).
@@ -207,7 +207,7 @@ MATCH_PLAY_ROUNDS = {
 }
 
 # Points tables (per-player values, already divided)
-# From "RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx"
+# From "points_structure/RYAN PARKS RYDER CUP RECOMMENDATIONS.xlsx"
 POINTS_TABLE = {
     # (event_type, places_paid): {place: per_player_pts}
     # Individual events
